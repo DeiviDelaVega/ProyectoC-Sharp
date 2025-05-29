@@ -1,0 +1,68 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Cliente
+
+@{
+    ViewBag.Title = "Registrarse";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Registro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/Content/css/registrarDesing.css?v=2">
+</head>
+<body>
+    <div class="register-box">
+        <h2>Registrarse</h2>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <label for="nombre">Nombre</label>
+            @Html.TextBoxFor(m => m.nombre, new { @class = "form-control", @type = "text" })
+            @Html.ValidationMessageFor(m => m.nombre, "", new { @class = "text-danger" })
+
+            <label for="apellido">Apellido</label>
+            @Html.TextBoxFor(m => m.apellido, new { @class = "form-control", @type = "text" })
+            @Html.ValidationMessageFor(m => m.apellido, "", new { @class = "text-danger" })
+
+            <label for="nroDocumento">N° Documento</label>
+            @Html.TextBoxFor(m => m.nroDocumento, new { @class = "form-control", @type = "text" })
+            @Html.ValidationMessageFor(m => m.nroDocumento, "", new { @class = "text-danger" })
+
+            <label for="direccion">Dirección</label>
+            @Html.TextBoxFor(m => m.direccion, new { @class = "form-control", @type = "text" })
+            @Html.ValidationMessageFor(m => m.direccion, "", new { @class = "text-danger" })
+
+            <label for="telefono">Teléfono</label>
+            @Html.TextBoxFor(m => m.telefono, new { @class = "form-control", @type = "tel" })
+            @Html.ValidationMessageFor(m => m.telefono, "", new { @class = "text-danger" })
+
+            <label for="correo">Correo</label>
+            @Html.TextBoxFor(m => m.correo, new { @class = "form-control", @type = "email" })
+            @Html.ValidationMessageFor(m => m.correo, "", new { @class = "text-danger" })
+
+            <label for="clave">Contraseña</label>
+            @Html.PasswordFor(m => m.clave, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.clave, "", new { @class = "text-danger" })
+
+            <input type="submit" value="Registrarse" class="btn-submit" />
+        }
+
+        @if (ViewBag.mensaje != null)
+        {
+            <div class="alert-info">
+                @ViewBag.mensaje
+            </div>
+        }
+
+        <div class="back-link">
+            @Html.ActionLink("¿Ya tienes una cuenta? Inicia sesión", "Login", "Login")
+        </div>
+    </div>
+</body>
+</html>
