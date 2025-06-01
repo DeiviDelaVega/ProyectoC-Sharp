@@ -1,0 +1,157 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Cliente
+
+@{
+    ViewBag.Title = "Editar";
+}
+
+@{
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<br />
+<h2 class="text-center">EDITAR CLIENTE @Model.IdCliente</h2>
+
+@using (Html.BeginForm("Edit", "Cliente", FormMethod.Post, new { id = "form-actualizar" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Modifica la información registrada</h4>
+        <hr />
+        <br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @* Campos ocultos para preservar el estado de paginación y filtros *@
+        @Html.Hidden("fecha1", (object)ViewBag.Fecha1)
+        @Html.Hidden("fecha2", (object)ViewBag.Fecha2)
+        @Html.Hidden("p", (object)ViewBag.p)
+        @Html.Hidden("startPageDisplay", (object)ViewBag.startPageDisplay)
+        @Html.HiddenFor(model => model.IdCliente) @* Asegura que IdCliente se envíe a la acción POST *@
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.IdCliente, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.IdCliente, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.IdCliente, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.apellido, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.apellido, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.apellido, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.nroDocumento, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.nroDocumento, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.nroDocumento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.direccion, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.direccion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.direccion, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.telefono, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.telefono, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.telefono, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.fechaRegistro, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.fechaRegistro, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.fechaRegistro, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.correo, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.correo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.clave)
+            </div>
+        </div>
+
+        <div class="button-group-container">
+            <button type="submit" class="btn btn-dark" onclick="return confirmarActualizacion()">Actualizar</button>
+            @* Pasar los parámetros de estado *@
+            @Html.ActionLink("Retornar", "ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = ViewBag.startPageDisplay }, new { @class = "btn btn-secondary button-spacer" })
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmarActualizacion() {
+        Swal.fire({
+            title: '¿Estás seguro de actualizar cliente?',
+            text: "Esta acción será permanente",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, actualizar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Envía el formulario solo si el usuario confirma
+                document.getElementById('form-actualizar').submit();
+            }
+        });
+        return false;
+    }
+
+    // Para mostrar un mensaje de error si la actualización falla por validación o DB.
+    @if (ViewBag.Actualizado != null && ViewBag.Actualizado == false)
+    {
+        <text>
+            Swal.fire({
+                title: 'Error de Actualización',
+                text: 'No se pudo actualizar el cliente. Por favor, revise los datos.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        </text>
+    }
+
+    // Este es el bloque para el éxito de la actualizacion
+    @if (ViewBag.Actualizado != null && ViewBag.Actualizado == true) // Verifica si existe y es true
+    {
+        <text>
+            Swal.fire({
+                title: '¡Cliente actualizado!',
+                text: 'El cliente se ha actualizado correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        </text>
+    }
+</script>

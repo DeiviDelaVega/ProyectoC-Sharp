@@ -1,0 +1,192 @@
+﻿@model IEnumerable<ProyectoExperienciasInmuebles.Models.Cliente>
+
+@{
+    ViewBag.Title = "Mantenimiento Clientes";
+}
+
+@{
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<br />
+<div class="list-clientes-container">
+    <h2 class="section-title"><strong>MANTENIMIENTO DE CLIENTES</strong></h2>
+
+    @using (Html.BeginForm())
+    {
+        <div class="fecha-container">
+            <label for="fecha1">Seleccionar Fecha Inicial:</label>
+            <input type="date" name="fecha1" id="fecha1" value="@ViewBag.Fecha1" />
+
+            <label for="fecha2">Seleccionar Fecha Final:</label>
+            <input type="date" name="fecha2" id="fecha2" value="@ViewBag.Fecha2" />
+
+            <input type="submit" value="Consultar Clientes" class="btn-consultar" />
+        </div>
+    }
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdCliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nroDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fechaRegistro)
+            </th>
+            <th>Acciones</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdCliente)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nroDocumento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fechaRegistro)
+                </td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = item.IdCliente, fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = ViewBag.startPageDisplay })" title="Detalles">
+                        <i class="fa fa-magnifying-glass icon-action"></i>
+                    </a>
+                    <a href="@Url.Action("Edit", new { id = item.IdCliente, fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = ViewBag.startPageDisplay })" title="Editar">
+                        <i class="fa fa-pen icon-action"></i>
+                    </a>
+                    <a href="#" onclick="confirmarEliminacion('@Url.Action("Delete", new { id = item.IdCliente, fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = ViewBag.startPageDisplay })'); return false;" title="Eliminar">
+                        <i class="fa fa-trash icon-action"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="mt-4">
+        @{
+            int totalPaginas = ViewBag.totalPaginas; // Obtener el total de páginas
+            int p = ViewBag.p; // Página activa actual (índice 0)
+            int startPageDisplay = ViewBag.startPageDisplay; // El inicio del bloque actual de páginas
+            int pagesToShow = ViewBag.pagesToShow; // Cuántos botones mostrar en un bloque
+
+            // Calcular las páginas de inicio y fin reales a mostrar
+            int actualStartPage = startPageDisplay;
+            int actualEndPage = Math.Min(startPageDisplay + pagesToShow - 1, totalPaginas - 1);
+
+            // Si el total de páginas es menor que pagesToShow, debemos ajustar el rango para mostrar solo las páginas disponibles.
+            // Esto maneja el caso en que tienes, por ejemplo, 2 páginas pero pagesToShow es 5.
+            if (totalPaginas <= pagesToShow)
+            {
+                actualStartPage = 0;
+                actualEndPage = totalPaginas - 1;
+            }
+            // Si totalPaginas es mayor que pagesToShow, y estamos cerca del final, asegúrate de que el bloque no se extienda más allá de totalPaginas y desplaza actualStartPage si es necesario.
+            else if (actualEndPage - actualStartPage + 1 < pagesToShow)
+            {
+                actualStartPage = Math.Max(0, actualEndPage - pagesToShow + 1);
+            }
+        }
+
+        @if (actualStartPage > 0) // Solo muestra "Prev" si no estamos en el primer bloque de la paginación
+        {
+            // La nueva startPageDisplay será el inicio del bloque anterior
+            int newStartPageDisplay = Math.Max(0, actualStartPage - pagesToShow);
+
+            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = newStartPageDisplay })"
+               class="btn btn-outline-secondary m-1">
+                &laquo; Prev
+            </a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary m-1" disabled>
+                &laquo; Prev
+            </button>
+        }
+
+        @for (int i = actualStartPage; i <= actualEndPage; i++)
+        {
+            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = i, startPageDisplay = ViewBag.startPageDisplay })"
+               class="btn @(i == ViewBag.p ? "btn-dark" : "btn-outline-secondary") m-1">
+                @(i + 1)
+            </a>
+        }
+
+        @if (actualEndPage < totalPaginas - 1) // Solo muestra "Next" si no estamos en el último bloque
+        {
+            // La nueva startPageDisplay será el inicio del siguiente bloque
+            int newStartPageDisplay = actualStartPage + pagesToShow;
+            // Asegúrate de que no intente ir más allá del límite superior al calcular el inicio del siguiente bloque
+            newStartPageDisplay = Math.Min(newStartPageDisplay, totalPaginas - pagesToShow);
+            // Si totalPaginas es menor que pagesToShow, esto podría ser negativo, asegúrate de que no lo sea.
+            newStartPageDisplay = Math.Max(0, newStartPageDisplay);
+
+            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = newStartPageDisplay })"
+               class="btn btn-outline-secondary m-1">
+                Next &raquo;
+            </a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary m-1" disabled>
+                Next &raquo;
+            </button>
+        }
+    </div>
+</div>
+<br />
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmarEliminacion(url) {
+        Swal.fire({
+            title: '¿Estás seguro de eliminar cliente?',
+            text: "Esta acción eliminará al cliente permanentemente",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+</script>
+
+@if (TempData["Eliminado"] != null && (bool)TempData["Eliminado"])
+{
+    <script>
+        Swal.fire({
+            title: '¡Cliente eliminado!',
+            text: 'El Cliente se ha eliminado correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+}
