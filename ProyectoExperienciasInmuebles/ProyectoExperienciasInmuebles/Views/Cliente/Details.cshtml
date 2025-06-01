@@ -1,0 +1,72 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Cliente
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+@{
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<br />
+<h2 class="text-center">DETALLES DEL CLIENTE @Model.IdCliente</h2>
+
+<div class="form-horizontal">
+    <h4 class="text-center">Consulta de datos</h4>
+    <hr />
+    <br />
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">ID Cliente:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.IdCliente)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Nombre:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.nombre)</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">Apellido:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.apellido)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Nro Documento:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.nroDocumento)</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">Dirección:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.direccion)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Teléfono:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.telefono)</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">Fecha Registro:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.fechaRegistro)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Correo:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.correo)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-group-container">
+        @Html.ActionLink("Retornar", "ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = ViewBag.startPageDisplay }, new { @class = "btn btn-secondary" })
+    </div>
+</div>
