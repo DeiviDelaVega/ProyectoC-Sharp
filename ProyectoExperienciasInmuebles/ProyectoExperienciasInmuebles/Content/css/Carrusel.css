@@ -1,0 +1,13 @@
+#carouselInmuebles {
+    max-height: 400px;
+    overflow: hidden;
+    margin-top: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+    #carouselInmuebles .carousel-item img {
+        width: 100%;
+        height: 400px; /* Fuerza un alto uniforme */
+        object-fit: cover; /* Recorta la imagen para llenar el contenedor sin deformarse */
+    }
