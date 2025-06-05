@@ -151,9 +151,14 @@
     <Content Include="Content\css\loginDesing.css" />
     <Content Include="Content\css\MainNav.css" />
     <Content Include="Content\css\MantCliente.css" />
+    <Content Include="Content\css\PagInicioAdmin.css" />
     <Content Include="Content\css\registrarDesing.css" />
+    <Content Include="Content\image\banner1.jpg" />
+    <Content Include="Content\image\banner2.jpg" />
+    <Content Include="Content\image\banner3.jpg" />
     <Content Include="Content\image\loginInmueble.jpg" />
     <Content Include="Content\image\OIP.jpg" />
+    <Content Include="Content\js\AdminJs.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
