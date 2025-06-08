@@ -30,7 +30,7 @@ namespace ProyectoExperienciasInmuebles.Controllers
                 switch (usuario.Rol)
                 {
                     case "Cliente":
-                        return RedirectToAction("Index", "Cliente");
+                        return RedirectToAction("MenuPrincipal", "PrincipalCliente");
                     case "Administrador":
                         return RedirectToAction("Index", "Admin");
                     default:

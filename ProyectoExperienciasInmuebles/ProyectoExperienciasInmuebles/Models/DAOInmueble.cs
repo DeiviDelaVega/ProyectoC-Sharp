@@ -165,5 +165,104 @@ namespace ProyectoExperienciasInmuebles.Models
             }
         }
 
+        //probando
+        public List<Inmueble> ListarInmueblesXPrecio(decimal? precioMin, decimal? precioMax, string estado)
+        {
+            List<Inmueble> lista = new List<Inmueble>();
+            SqlCommand cmd = new SqlCommand("usp_ConsultaInmueblesPrecio", cn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@precioMin", (object)precioMin ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@precioMax", (object)precioMax ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@estado", (object)estado ?? DBNull.Value);
+
+            try
+            {
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    Inmueble obj = new Inmueble()
+                    {
+                        id_inmueble = Convert.ToInt32(dr["id_inmueble"]),
+                        titulo = dr["titulo"].ToString(),
+                        descripcion = dr["descripcion"].ToString(),
+                        direccion = dr["direccion"].ToString(),
+                        precio = Convert.ToDecimal(dr["precio"]),
+                        imagen = dr["imagen"].ToString(),
+                        estado = dr["estado"].ToString(),
+                        fecharegistro = Convert.ToDateTime(dr["fecharegistro"])
+                    };
+                    lista.Add(obj);
+                }
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return lista;
+        }
+
+        public List<Inmueble> ListarInmueblesXTitulo(string titulo, string estado)
+        {
+            List<Inmueble> lista = new List<Inmueble>();
+            SqlCommand cmd = new SqlCommand("usp_ConsultaInmueblesTitulo", cn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@titulo", (object)titulo ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@estado", (object)estado ?? DBNull.Value);
+
+            cn.Open();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                lista.Add(new Inmueble
+                {
+                    id_inmueble = Convert.ToInt32(dr["id_inmueble"]),
+                    titulo = dr["titulo"].ToString(),
+                    descripcion = dr["descripcion"].ToString(),
+                    direccion = dr["direccion"].ToString(),
+                    precio = Convert.ToDecimal(dr["precio"]),
+                    imagen = dr["imagen"].ToString(),
+                    estado = dr["estado"].ToString(),
+                    fecharegistro = Convert.ToDateTime(dr["fecharegistro"])
+                });
+            }
+            dr.Close();
+            cn.Close();
+            return lista;
+
+        }
+
+        public List<Inmueble> ListarInmueblesPorEstado(string estado)
+        {
+            List<Inmueble> lista = new List<Inmueble>();
+            SqlCommand cmd = new SqlCommand("usp_ConsultaInmueblesEstado", cn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@estado", (object)estado ?? DBNull.Value);
+
+            cn.Open();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                Inmueble obj = new Inmueble()
+                {
+                    id_inmueble = Convert.ToInt32(dr["id_inmueble"]),
+                    titulo = dr["titulo"].ToString(),
+                    descripcion = dr["descripcion"].ToString(),
+                    direccion = dr["direccion"].ToString(),
+                    precio = Convert.ToDecimal(dr["precio"]),
+                    imagen = dr["imagen"].ToString(),
+                    estado = dr["estado"].ToString(),
+                    fecharegistro = Convert.ToDateTime(dr["fecharegistro"])
+                };
+                lista.Add(obj);
+            }
+            dr.Close();
+            cn.Close();
+            return lista;
+        }
+
+
     }
 }

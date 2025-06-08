@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Subir Imagen a Cloudinary";
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<br />
+<h2 class="text-center">SUBIR IMAGEN A CLOUDINARY</h2>
+
+@using (Html.BeginForm("SubirImagenCloudinary", "Cloudinary", FormMethod.Post, new { enctype = "multipart/form-data", id = "form-subir" }))
+{
+    <div class="form-horizontal">
+        <h4 class="text-center">Selecciona y sube la imagen</h4>
+        <hr />
+        <br />
+
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-md-6">
+                    <label class="control-label" for="archivo">Seleccionar archivo:</label>
+                    <input type="file" class="form-control bg-dark text-light" name="archivo" id="archivo" required />
+                </div>
+            </div>
+
+            <div class="form-row mt-4">
+                <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-success">Subir Imagen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="text-center mt-4 alert alert-info">
+        @ViewBag.Mensaje
+    </div>
+}
+
+@if (ViewBag.UrlImagen != null)
+{
+    <div class="form-horizontal mt-5">
+        <h4 class="text-center">Resultado de la Subida</h4>
+        <hr />
+        <br />
+
+        <div class="form-group">
+            <div class="form-row text-center">
+                <div class="col-md-12">
+                    <label class="control-label">Imagen subida:</label><br />
+                    <img src="@ViewBag.UrlImagen" class="img-thumbnail mb-3" style="max-width: 300px;" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-12">
+                    <label class="control-label">URL de la imagen:</label>
+                    <p class="form-control text-truncate">
+                        <a href="@ViewBag.UrlImagen" target="_blank">@ViewBag.UrlImagen</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="button-group-container text-center mt-4">
+    @Html.ActionLink("Retornar", "ListInmuebles", new
+    {
+        fecha1 = ViewBag.Fecha1,
+        fecha2 = ViewBag.Fecha2,
+        p = ViewBag.p,
+        startPageDisplay = ViewBag.startPageDisplay
+    }, new { @class = "btn btn-secondary" })
+</div>
+
+<script>
+    document.getElementById("form-subir").addEventListener("submit", function (e) {
+        const archivoInput = document.getElementById("archivo");
+        const nombreArchivo = archivoInput.files[0]?.name;
+
+        if (sessionStorage.getItem(nombreArchivo)) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Archivo repetido',
+                text: 'Ya subiste un archivo con el mismo nombre. ¿Deseas continuar?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, subir de nuevo',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    sessionStorage.setItem(nombreArchivo, true);
+                    document.getElementById("form-subir").submit();
+                }
+            });
+        } else {
+            sessionStorage.setItem(nombreArchivo, true);
+        }
+    });
+</script>

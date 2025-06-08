@@ -1,0 +1,306 @@
+﻿@model IEnumerable<ProyectoExperienciasInmuebles.Models.Inmueble>
+@using ProyectoExperienciasInmuebles.Models
+
+
+@{
+    ViewBag.Title = "Inmuebles Disponibles";
+    Cliente cliente = ViewBag.Cliente as Cliente;
+    Layout = null;
+}
+
+
+
+<div>
+    @Html.Partial("_HeaderVenta")
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    .card-inmueble {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+        .card-inmueble .img-fluid {
+            border-radius: 12px 0 0 12px;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .iconos-servicios i {
+        margin-right: 8px;
+        font-size: 18px;
+        color: #555;
+    }
+
+    .precio {
+        font-size: 22px;
+        color: #333;
+    }
+
+    .btn-reservar {
+        background-color: #5a5a5a;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+
+        .btn-reservar:hover {
+            background-color: #343434;
+        }
+
+    .estado-disponible {
+        color: green;
+        font-weight: bold;
+    }
+
+    .estado-ocupado {
+        color: red;
+        font-weight: bold;
+    }
+
+    .filtros-container {
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 15px;
+    }
+
+    label, .filtro-titulo {
+        font-weight: bold;
+    }
+
+    /* Mejora visual para inputs */
+    .form-control {
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #5a5a5a;
+            box-shadow: 0 0 5px rgba(90, 90, 90, 0.4);
+        }
+
+    /* Botones */
+    .btn-dark {
+        font-weight: bold;
+    }
+
+    .btn-outline-secondary {
+        font-weight: bold;
+    }
+
+    /* Espaciado más armonioso entre filtros */
+    .filtros-container .form-group,
+    .filtros-container .col-md-3,
+    .filtros-container .col-md-4,
+    .filtros-container .col-md-6 {
+        margin-bottom: 20px;
+    }
+
+    /* Mejora la presentación general */
+    .filtros-container .row {
+        row-gap: 20px;
+    }
+
+    <style >
+    .btn-filtros {
+        min-width: 100px;
+        white-space: nowrap;
+    }
+</style>
+
+</style>
+
+<div class="container mt-4">
+
+    <h2 class="text-center mb-2">
+        <a href="@Url.Action("MenuPrincipal", "PrincipalCliente")" style="text-decoration:none; color: inherit;">
+            Inmuebles Disponibles
+        </a>
+    </h2>
+
+
+    @if (cliente != null)
+    {
+        <h5 class="text-center text-muted mb-4">Bienvenido, @cliente.nombre @cliente.apellido</h5>
+    }
+
+    @using (Html.BeginForm("MenuPrincipal", "PrincipalCliente", FormMethod.Get))
+    {
+        <div class="container mb-4">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-8">
+                    <label for="titulo" class="fw-bold">Buscar inmueble :</label>
+                    <input type="text" name="titulo" class="form-control form-control-lg" placeholder="Ingrese el nombre inmueble..." />
+                </div>
+                <div class="col-md-2">
+                    <label class="invisible">Buscar</label>
+                    <button type="submit" class="btn btn-dark btn-lg w-100">Buscar</button>
+                </div>
+                <div class="col-md-2">
+                    <label class="invisible">Filtros</label>
+                    <button type="button" class="btn btn-outline-secondary btn-lg w-100" id="btnToggleFiltros">
+                        <i class="fa fa-sliders-h me-1"></i> Filtros
+                    </button>
+
+                </div>
+            </div>
+
+
+            <div id="filtrosOpcionales" class="filtros-container" style="display:none;">
+
+                <div class="col-md-6">
+                    <label for="precioDesde">Precio desde :</label>
+                    <input type="number" name="precioDesde" class="form-control" placeholder="S/." />
+                </div>
+                <div class="col-md-6">
+                    <label for="precioHasta">Precio hasta :</label>
+                    <input type="number" name="precioHasta" class="form-control" placeholder="S/." />
+                </div>
+
+                <div class="col-md-6">
+                    <label for="fecha1">Fecha registrada desde :</label>
+                    <input type="date" name="fecha1" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="fecha2">Fecha registrada hasta :</label>
+                    <input type="date" name="fecha2" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label for="estado">Estado :</label>
+                    @Html.DropDownList("estado", new SelectList(
+                        new List<SelectListItem>
+                        {
+                            new SelectListItem { Text = "Disponible", Value = "disponible" },
+                            new SelectListItem { Text = "Ocupado", Value = "ocupado" }
+                        }, "Value", "Text", Request["estado"]), new { @class = "form-control" })
+                </div>
+
+            </div>
+        </div>
+    }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleBtn = document.getElementById("btnToggleFiltros");
+            const filtros = document.getElementById("filtrosOpcionales");
+
+            toggleBtn.addEventListener("click", function () {
+                if (filtros.style.display === "none") {
+                    filtros.style.display = "flex";
+                    filtros.classList.add("flex-wrap");
+                    toggleBtn.textContent = "Ocultar filtros";
+                } else {
+                    filtros.style.display = "none";
+                    toggleBtn.textContent = "Mostrar filtros";
+                }
+            });
+        });
+    </script>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center mt-4">
+            <i class="fa fa-exclamation-triangle me-2"></i> No se encontraron resultados con los filtros aplicados.
+        </div>
+    }
+
+    @foreach (var item in Model)
+    {
+        <div class="row card-inmueble p-3">
+            <div class="col-md-4">
+                <img src="@item.imagen" class="img-fluid w-100 h-100" alt="Imagen del Inmueble" />
+            </div>
+            <div class="col-md-5 d-flex flex-column justify-content-between">
+                <div>
+                    <h4><strong>@item.titulo</strong></h4>
+                    <p>@item.descripcion</p>
+                    <p><strong>Dirección:</strong> @item.direccion</p>
+
+                    @{
+                        var estadoNormalizado = item.estado?.Trim().ToLower();
+                        var claseEstado = estadoNormalizado == "disponible" ? "estado-disponible" : "estado-ocupado";
+                    }
+                    <p>
+                        <strong>Estado:</strong>
+                        <span class="@claseEstado">
+                            @item.estado
+                        </span>
+                    </p>
+                </div>
+                <div class="mt-2">
+                    <span class="text-muted">Registrado: @item.fecharegistro.ToString("dd/MM/yyyy")</span>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex flex-column justify-content-center align-items-center">
+                <span class="precio">S/.@item.precio</span>
+                <a href="@Url.Action("Details", new { id = item.id_inmueble })" class="btn btn-reservar mt-3">Reservar</a>
+            </div>
+        </div>
+    }
+
+    <!-- Paginación -->
+    <div class="text-center mt-4">
+        @{
+            int totalPaginas = ViewBag.totalPaginas;
+            int p = ViewBag.p;
+            int startPageDisplay = ViewBag.startPageDisplay;
+            int pagesToShow = ViewBag.pagesToShow;
+
+            int actualStartPage = startPageDisplay;
+            int actualEndPage = Math.Min(startPageDisplay + pagesToShow - 1, totalPaginas - 1);
+
+            if (totalPaginas <= pagesToShow)
+            {
+                actualStartPage = 0;
+                actualEndPage = totalPaginas - 1;
+            }
+            else if (actualEndPage - actualStartPage + 1 < pagesToShow)
+            {
+                actualStartPage = Math.Max(0, actualEndPage - pagesToShow + 1);
+            }
+
+            string titulo = Request.QueryString["titulo"];
+            string precioDesde = Request.QueryString["precioDesde"];
+            string precioHasta = Request.QueryString["precioHasta"];
+            string estado = Request.QueryString["estado"];
+        }
+
+        @if (actualStartPage > 0)
+        {
+            int newStartPageDisplay = Math.Max(0, actualStartPage - pagesToShow);
+            <a href="@Url.Action("MenuPrincipal", new { p = p, startPageDisplay = newStartPageDisplay, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })" class="btn btn-outline-secondary m-1">&laquo; Prev</a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary m-1" disabled>&laquo; Prev</button>
+        }
+
+        @for (int i = actualStartPage; i <= actualEndPage; i++)
+        {
+            <a href="@Url.Action("MenuPrincipal", new { p = i, startPageDisplay = startPageDisplay, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })"
+               class="btn @(i == p ? "btn-dark" : "btn-outline-secondary") m-1">@(i + 1)</a>
+        }
+
+        @if (actualEndPage < totalPaginas - 1)
+        {
+            int newStartPageDisplay = Math.Min(totalPaginas - pagesToShow, actualStartPage + pagesToShow);
+            <a href="@Url.Action("MenuPrincipal", new { p = p, startPageDisplay = newStartPageDisplay, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })" class="btn btn-outline-secondary m-1">Next &raquo;</a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary m-1" disabled>Next &raquo;</button>
+        }
+    </div>
+</div>
