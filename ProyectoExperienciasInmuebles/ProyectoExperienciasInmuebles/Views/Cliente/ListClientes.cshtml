@@ -28,6 +28,9 @@
             <label for="fecha2">Seleccionar Fecha Final:</label>
             <input type="date" name="fecha2" id="fecha2" value="@ViewBag.Fecha2" />
 
+            <input type="hidden" name="p" value="0" /> <!-- Esto establece el índice de página en 0 (primera página) -->
+            <input type="hidden" name="startPageDisplay" value="0" /> <!-- Esto establece el inicio del bloque de visualización en 0 -->
+
             <input type="submit" value="Consultar Clientes" class="btn-consultar" />
         </div>
     }
@@ -94,26 +97,36 @@
             int actualStartPage = startPageDisplay;
             int actualEndPage = Math.Min(startPageDisplay + pagesToShow - 1, totalPaginas - 1);
 
-            // Si el total de páginas es menor que pagesToShow, debemos ajustar el rango para mostrar solo las páginas disponibles.
-            // Esto maneja el caso en que tienes, por ejemplo, 2 páginas pero pagesToShow es 5.
+            // Si el total de páginas es menor que pagesToShow, ajusta el rango para mostrar solo las páginas disponibles.
             if (totalPaginas <= pagesToShow)
             {
                 actualStartPage = 0;
                 actualEndPage = totalPaginas - 1;
             }
-            // Si totalPaginas es mayor que pagesToShow, y estamos cerca del final, asegúrate de que el bloque no se extienda más allá de totalPaginas y desplaza actualStartPage si es necesario.
+            // Si totalPaginas es mayor que pagesToShow, y estamos cerca del final, asegúrate de que el bloque no se extienda más allá de totalPaginas y ajusta actualStartPage si es necesario para mantener 'pagesToShow' botones.
             else if (actualEndPage - actualStartPage + 1 < pagesToShow)
             {
-                actualStartPage = Math.Max(0, actualEndPage - pagesToShow + 1);
+                actualStartPage = Math.Max(0, totalPaginas - pagesToShow);
+                actualEndPage = totalPaginas - 1;
             }
         }
 
-        @if (actualStartPage > 0) // Solo muestra "Prev" si no estamos en el primer bloque de la paginación
+        @* Botón "Prev" *@
+        @if (p > 0) // Solo muestra "Prev" si no estamos en la primera página
         {
-            // La nueva startPageDisplay será el inicio del bloque anterior
-            int newStartPageDisplay = Math.Max(0, actualStartPage - pagesToShow);
+            // La nueva página activa es simplemente la anterior
+            int newPForPrev = p - 1;
+            // El startPageDisplay se ajusta si la nueva página activa queda fuera del bloque actual (a la izquierda)
+            int newStartPageDisplayForPrev = startPageDisplay;
+            if (newPForPrev < startPageDisplay)
+            {
+                newStartPageDisplayForPrev = newPForPrev;
+            }
+            // Asegúrate de que startPageDisplay no sea negativo
+            newStartPageDisplayForPrev = Math.Max(0, newStartPageDisplayForPrev);
 
-            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = newStartPageDisplay })"
+
+            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = newPForPrev, startPageDisplay = newStartPageDisplayForPrev })"
                class="btn btn-outline-secondary m-1">
                 &laquo; Prev
             </a>
@@ -125,24 +138,29 @@
             </button>
         }
 
+        @* Botones de números de página *@
         @for (int i = actualStartPage; i <= actualEndPage; i++)
         {
-            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = i, startPageDisplay = ViewBag.startPageDisplay })"
-               class="btn @(i == ViewBag.p ? "btn-dark" : "btn-outline-secondary") m-1">
+            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = i, startPageDisplay = actualStartPage })"
+               class="btn @(i == p ? "btn-dark" : "btn-outline-secondary") m-1">
                 @(i + 1)
             </a>
         }
 
-        @if (actualEndPage < totalPaginas - 1) // Solo muestra "Next" si no estamos en el último bloque
+        @* Botón "Next" *@
+        @if (p < totalPaginas - 1) // Solo muestra "Next" si no estamos en la última página
         {
-            // La nueva startPageDisplay será el inicio del siguiente bloque
-            int newStartPageDisplay = actualStartPage + pagesToShow;
-            // Asegúrate de que no intente ir más allá del límite superior al calcular el inicio del siguiente bloque
-            newStartPageDisplay = Math.Min(newStartPageDisplay, totalPaginas - pagesToShow);
-            // Si totalPaginas es menor que pagesToShow, esto podría ser negativo, asegúrate de que no lo sea.
-            newStartPageDisplay = Math.Max(0, newStartPageDisplay);
+            // La nueva página activa es simplemente la siguiente
+            int newPForNext = p + 1;
+            // El startPageDisplay se ajusta si la nueva página activa queda fuera del bloque actual (a la derecha)
+            int newStartPageDisplayForNext = startPageDisplay;
+            if (newPForNext > actualEndPage)
+            {
+                newStartPageDisplayForNext = Math.Min(newPForNext - pagesToShow + 1, totalPaginas - pagesToShow);
+                newStartPageDisplayForNext = Math.Max(0, newStartPageDisplayForNext); // Asegúrate de que no sea negativo
+            }
 
-            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = newStartPageDisplay })"
+            <a href="@Url.Action("ListClientes", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = newPForNext, startPageDisplay = newStartPageDisplayForNext })"
                class="btn btn-outline-secondary m-1">
                 Next &raquo;
             </a>
