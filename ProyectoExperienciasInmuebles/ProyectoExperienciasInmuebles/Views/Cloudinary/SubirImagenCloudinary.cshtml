@@ -72,14 +72,15 @@
 }
 
 <div class="button-group-container text-center mt-4">
-    @Html.ActionLink("Retornar", "ListInmuebles", new
-    {
-        fecha1 = ViewBag.Fecha1,
-        fecha2 = ViewBag.Fecha2,
-        p = ViewBag.p,
-        startPageDisplay = ViewBag.startPageDisplay
-    }, new { @class = "btn btn-secondary" })
+    <button type="button" class="btn btn-danger" onclick="cerrarPestana()">Cerrar</button>
 </div>
+
+<script>
+    function cerrarPestana() {
+        window.open('', '_self', '');
+        window.close();
+    }
+</script>
 
 <script>
     document.getElementById("form-subir").addEventListener("submit", function (e) {
