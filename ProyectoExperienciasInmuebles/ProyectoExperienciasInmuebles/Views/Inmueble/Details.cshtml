@@ -1,0 +1,87 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Inmueble
+
+@{
+    ViewBag.Title = "Detalles del Inmueble";
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<br />
+<h2 class="text-center">DETALLES DEL INMUEBLE @Model.id_inmueble</h2>
+
+<div class="form-horizontal">
+    <h4 class="text-center">Consulta de datos</h4>
+    <hr />
+    <br />
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">ID Inmueble:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.id_inmueble)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Título:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.titulo)</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">Descripción:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.descripcion)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Dirección:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.direccion)</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">Precio:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.precio)</p>
+            </div>
+
+            <div class="col-md-6">
+                <label class="control-label">Imagen:</label>
+                <pre class="form-control">@Html.DisplayFor(model => model.imagen)</pre>
+                <!-- Botón que abre la imagen en una nueva pestaña -->
+
+                <label class="control-label">Visualizar Imagen:</label>
+                <div class="form-control">
+                    <!-- Botón que abre la imagen en una nueva pestaña -->
+                    <a href="@Html.DisplayFor(model => model.imagen)" target="_blank" class="btn btn-dark">
+                        Click para ver imagen
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">Estado:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.estado)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Fecha de Registro:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.fecharegistro)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-group-container">
+        @Html.ActionLink("Retornar", "ListInmuebles", new
+        {
+            fecha1 = ViewBag.Fecha1,
+            fecha2 = ViewBag.Fecha2,
+            p = ViewBag.p,
+            startPageDisplay = ViewBag.startPageDisplay
+        }, new { @class = "btn btn-secondary" })
+    </div>
+</div>

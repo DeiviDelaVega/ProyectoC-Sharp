@@ -1,0 +1,154 @@
+﻿@model IEnumerable<ProyectoExperienciasInmuebles.Models.Inmueble>
+
+@{
+    ViewBag.Title = "Mantenimiento Inmuebles";
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<br />
+<div class="list-clientes-container">
+    <h2 class="section-title"><strong>MANTENIMIENTO DE INMUEBLES</strong></h2>
+
+    @using (Html.BeginForm())
+    {
+        <div class="fecha-container">
+            <label for="fecha1">Seleccionar Fecha Inicial:</label>
+            <input type="date" name="fecha1" id="fecha1" value="@ViewBag.Fecha1" />
+
+            <label for="fecha2">Seleccionar Fecha Final:</label>
+            <input type="date" name="fecha2" id="fecha2" value="@ViewBag.Fecha2" />
+
+            <input type="submit" value="Consultar Inmuebles" class="btn-consultar" />
+        </div>
+    }
+
+    <table class="table">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().id_inmueble)</th>
+            <th>@Html.DisplayNameFor(model => model.First().titulo)</th>
+            <th>@Html.DisplayNameFor(model => model.First().direccion)</th>
+            <th>@Html.DisplayNameFor(model => model.First().precio)</th>
+            <th>@Html.DisplayNameFor(model => model.First().estado)</th>
+            <th>@Html.DisplayNameFor(model => model.First().fecharegistro)</th>
+            <th>Acciones</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id_inmueble</td>
+                <td>@item.titulo</td>
+                <td>@item.direccion</td>
+                <td>@item.precio.ToString("C")</td>
+                <td>@item.estado</td>
+                <td>@item.fecharegistro.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = item.id_inmueble, fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = ViewBag.startPageDisplay })" title="Detalles">
+                        <i class="fa fa-magnifying-glass icon-action"></i>
+                    </a>
+                    <a href="@Url.Action("Edit", new { id = item.id_inmueble, fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = ViewBag.startPageDisplay })" title="Editar">
+                        <i class="fa fa-pen icon-action"></i>
+                    </a>
+                    <a href="#" onclick="confirmarEliminacion('@Url.Action("Delete", new { id = item.id_inmueble, fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = ViewBag.p, startPageDisplay = ViewBag.startPageDisplay })'); return false;" title="Eliminar">
+                        <i class="fa fa-trash icon-action"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <!-- Paginación -->
+    <div class="mt-4">
+        @{
+            int totalPaginas = ViewBag.totalPaginas;
+            int p = ViewBag.p;
+            int startPageDisplay = ViewBag.startPageDisplay;
+            int pagesToShow = ViewBag.pagesToShow;
+
+            int actualStartPage = startPageDisplay;
+            int actualEndPage = Math.Min(startPageDisplay + pagesToShow - 1, totalPaginas - 1);
+
+            if (totalPaginas <= pagesToShow)
+            {
+                actualStartPage = 0;
+                actualEndPage = totalPaginas - 1;
+            }
+            else if (actualEndPage - actualStartPage + 1 < pagesToShow)
+            {
+                actualStartPage = Math.Max(0, actualEndPage - pagesToShow + 1);
+            }
+        }
+
+        @if (actualStartPage > 0)
+        {
+            int newStartPageDisplay = Math.Max(0, actualStartPage - pagesToShow);
+            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = p, startPageDisplay = newStartPageDisplay })"
+               class="btn btn-outline-secondary m-1">&laquo; Prev</a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary m-1" disabled>&laquo; Prev</button>
+        }
+
+        @for (int i = actualStartPage; i <= actualEndPage; i++)
+        {
+            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = i, startPageDisplay = startPageDisplay })"
+               class="btn @(i == p ? "btn-dark" : "btn-outline-secondary") m-1">@(i + 1)</a>
+        }
+
+        @if (actualEndPage < totalPaginas - 1)
+        {
+            int newStartPageDisplay = Math.Max(0, actualStartPage + pagesToShow);
+            newStartPageDisplay = Math.Min(newStartPageDisplay, totalPaginas - pagesToShow);
+
+            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = p, startPageDisplay = newStartPageDisplay })"
+               class="btn btn-outline-secondary m-1">Next &raquo;</a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary m-1" disabled>Next &raquo;</button>
+        }
+    </div>
+</div>
+<br />
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmarEliminacion(url) {
+        Swal.fire({
+            title: '¿Estás seguro de eliminar inmueble?',
+            text: "Esta acción eliminará el inmueble permanentemente",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+</script>
+
+@if (TempData["Eliminado"] != null && (bool)TempData["Eliminado"])
+{
+    <script>
+        Swal.fire({
+            title: '¡Inmueble eliminado!',
+            text: 'El inmueble se ha eliminado correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+}

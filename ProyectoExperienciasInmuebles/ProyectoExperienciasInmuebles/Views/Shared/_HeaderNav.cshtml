@@ -29,8 +29,13 @@
                             new{@class = "nav-link px-3 rounded " + (currentAction == "Index" && currentController == "Admin" ? "active" : "")})
                     </li>
                     <li class="nav-item">
+                        @Html.ActionLink("🛠️ Mantenimiento de Inmueble", "ListInmuebles", "Inmueble", new { area = "" },
+                            new { @class = "nav-link px-3 rounded " + ((currentController == "Inmueble" && (currentAction == "ListInmuebles" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "") })
+                    </li>
+
+                    <li class="nav-item">
                         @Html.ActionLink("🛠️ Mantenimiento de Clientes", "ListClientes", "Cliente", new { area = "" },
-                            new{@class = "nav-link px-3 rounded " + ((currentController == "Cliente" && (currentAction == "ListClientes" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "") })
+                            new { @class = "nav-link px-3 rounded " + ((currentController == "Cliente" && (currentAction == "ListClientes" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "") })
                     </li>
                 </ul>
             </div>

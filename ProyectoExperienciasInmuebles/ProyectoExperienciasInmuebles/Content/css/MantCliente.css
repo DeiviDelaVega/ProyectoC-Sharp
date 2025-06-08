@@ -258,3 +258,12 @@ button.btn-dark:hover {
 .button-spacer {
     margin-left: 60px;
 }
+.form-control-long {
+    white-space: pre-wrap; /* Permite saltos de línea */
+    word-wrap: break-word; /* Rompe palabras largas */
+    overflow-wrap: break-word; /* También útil para URLs */
+    width: 100%; /* Se adapta al contenedor */
+}
+.form-control[style*="width"] {
+    width: auto !important;
+}
