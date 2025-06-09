@@ -1,7 +1,28 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Administrador";
 }
 
-<h2>Administrador</h2>
+@{
+    Layout = null;
+}
 
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<br />
+
+<link rel="stylesheet" href="~/Content/css/PagInicioAdmin.css" />
+<script src="~/Content/js/AdminJs.js"></script>
+
+<h2 class="text-center"> <strong>Bienvenido a la vista del Administrador</strong> </h2>
+
+<div class="banner-container">
+    <img src="/Content/image/banner1.jpg" id="banner">
+</div>
+
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>

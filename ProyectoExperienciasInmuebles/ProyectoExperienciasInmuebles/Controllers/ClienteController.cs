@@ -13,6 +13,12 @@ namespace ProyectoExperienciasInmuebles.Controllers
 
         public ActionResult ListClientes(DateTime? fecha1 = null, DateTime? fecha2 = null, int idCliente = 0, int p = 0, int? startPageDisplay = null)
         {
+            //Comprueba ID_USUARIO
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
             var clientes = db.ListarClientesXFechas(fecha1, fecha2, idCliente).ToList();
             int total = clientes.Count();
             int filasPorPagina = 5;
@@ -24,7 +30,7 @@ namespace ProyectoExperienciasInmuebles.Controllers
             ViewBag.totalPaginas = totalPaginas;
 
             // --- LÓGICA PARA CONTROLAR EL RANGO VISIBLE DE PÁGINAS ---
-            int pagesToShow = 5; // Define cuántos botones de página quieres mostrar en cada "bloque"
+            int pagesToShow = 3; // Define cuántos botones de página quieres mostrar en cada "bloque"
             int currentStartPage;
 
             if (startPageDisplay.HasValue)
@@ -47,6 +53,8 @@ namespace ProyectoExperienciasInmuebles.Controllers
             var clientesPaginados = clientes.Skip(p * filasPorPagina).Take(filasPorPagina);
 
             return View(clientesPaginados);
+
+
         }
 
         public ActionResult Edit(int id, string fecha1 = null, string fecha2 = null, int? p = null, int? startPageDisplay = null)

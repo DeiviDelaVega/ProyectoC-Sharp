@@ -67,5 +67,13 @@ namespace ProyectoExperienciasInmuebles.Controllers
             TempData["MensajeLogout"] = "Sesión cerrada con éxito.";
             return RedirectToAction("Login", "Login");
         }
+
+        public ActionResult Logout()
+        {
+            Session.Clear(); // Borra todas las variables de sesión
+            Session.Abandon(); // Finaliza la sesión
+
+            return RedirectToAction("Login", "Login");
+        }
     }
 }

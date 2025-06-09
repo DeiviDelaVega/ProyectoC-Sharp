@@ -23,10 +23,18 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        @Html.ActionLink("📌 Inicio", "", "", new { area = "" },
-                            new { @class = "nav-link px-3 rounded " + (currentAction == "" && currentController == "" ? "active" : "") })
+                        <a class="nav-link btn btn-danger text-white px-4 rounded ms-3"
+                           href="@Url.Action("Logout", "Login")"
+                           style="font-weight: bold; font-size: 16px;">
+                            🔒 Cerrar Sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("📌 Inicio", "Index", "Admin", new { area = "" },
+                            new { @class = "nav-link px-3 rounded " + (currentAction == "Index" && currentController == "Admin" ? "active" : "") })
                     </li>
                     <li class="nav-item">
                         @Html.ActionLink("🛠️ Mantenimiento de Inmueble", "ListInmuebles", "Inmueble", new { area = "" },

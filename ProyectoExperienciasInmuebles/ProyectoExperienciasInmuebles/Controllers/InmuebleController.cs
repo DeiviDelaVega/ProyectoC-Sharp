@@ -17,7 +17,12 @@ namespace ProyectoExperienciasInmuebles.Controllers
 
         public ActionResult ListInmuebles(DateTime? fecha1 = null, DateTime? fecha2 = null, string estado = null, int p = 0, int? startPageDisplay = null)
             {
-                var inmuebles = db.ListarInmueblesXFechas(fecha1, fecha2, estado).ToList();
+            //Comprueba ID_USUARIO
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            var inmuebles = db.ListarInmueblesXFechas(fecha1, fecha2, estado).ToList();
                 int total = inmuebles.Count();
                 int filasPorPagina = 5;
                 int totalPaginas = (total + filasPorPagina - 1) / filasPorPagina;
