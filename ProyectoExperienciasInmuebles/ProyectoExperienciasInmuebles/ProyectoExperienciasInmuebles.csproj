@@ -212,6 +212,7 @@
     <Content Include="Content\css\Carrusel.css" />
     <Content Include="Content\css\loginDesing.css" />
     <Content Include="Content\css\MainNav.css" />
+    <Content Include="Content\css\MantInmueble.css" />
     <Content Include="Content\css\MantCliente.css" />
     <Content Include="Content\css\registrarDesing.css" />
     <Content Include="Content\image\inmueble.jpg" />
@@ -267,6 +268,7 @@
     <Content Include="Views\Inmueble\Details.cshtml" />
     <Content Include="Views\PrincipalCliente\MenuPrincipal.cshtml" />
     <Content Include="Views\Cloudinary\SubirImagenCloudinary.cshtml" />
+    <Content Include="Views\Inmueble\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -149,6 +149,35 @@ namespace ProyectoExperienciasInmuebles.Controllers
             return RedirectToAction("ListInmuebles", new { fecha1 = fecha1, fecha2 = fecha2, p = p, startPageDisplay = startPageDisplay });
         }
 
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Inmueble reg)
+        {
+            if (ModelState.IsValid)
+            {
+                bool creado = db.Registrar(reg);
+                if (creado)
+                {
+                    TempData["Mensaje"] = "Inmueble registrado correctamente";
+                    return RedirectToAction("ListInmuebles");
+                }
+                else
+                {
+                    ViewBag.Error = "No se pudo registrar el inmueble.";
+                }
+            }
+
+            return View(reg);
+        }
+
+
     }
 
 }

@@ -27,6 +27,13 @@ namespace ProyectoExperienciasInmuebles.Controllers
             {
                 Session["ID_Usuario"] = usuario.ID_Usuario;
                 Session["Rol"] = usuario.Rol;
+
+                // Si es cliente, guardar también su ID_Cliente en sesión
+                if (usuario.Rol == "Cliente")
+                {
+                    Session["ID_Cliente"] = usuario.ID_Cliente;
+                }
+
                 switch (usuario.Rol)
                 {
                     case "Cliente":
@@ -52,6 +59,13 @@ namespace ProyectoExperienciasInmuebles.Controllers
         {
             ViewBag.mensaje = da.RegistrarClientes(cli);
             return View(cli);
+        }
+
+        public ActionResult CerrarSesion()
+        {
+            Session.Clear(); // Limpiar sesión
+            TempData["MensajeLogout"] = "Sesión cerrada con éxito.";
+            return RedirectToAction("Login", "Login");
         }
     }
 }

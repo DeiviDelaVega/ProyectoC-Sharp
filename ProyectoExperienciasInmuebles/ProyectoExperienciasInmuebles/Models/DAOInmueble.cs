@@ -165,7 +165,39 @@ namespace ProyectoExperienciasInmuebles.Models
             }
         }
 
-        //probando
+        public bool Registrar(Inmueble reg)
+        {
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(
+                    ConfigurationManager.ConnectionStrings["ExperienciasInmueble"].ConnectionString))
+                {
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand("usp_inmueble_registrar", cn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@titulo", reg.titulo);
+                        cmd.Parameters.AddWithValue("@descripcion", (object)reg.descripcion ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@direccion", reg.direccion);
+                        cmd.Parameters.AddWithValue("@precio", reg.precio);
+                        cmd.Parameters.AddWithValue("@imagen", (object)reg.imagen ?? DBNull.Value);
+                        cmd.Parameters.AddWithValue("@estado", (object)reg.estado ?? "disponible");
+
+                        int filasAfectadas = cmd.ExecuteNonQuery();
+                        return filasAfectadas > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al registrar el inmueble: " + ex.Message);
+            }
+        }
+
+
+
+        //filtros
         public List<Inmueble> ListarInmueblesXPrecio(decimal? precioMin, decimal? precioMax, string estado)
         {
             List<Inmueble> lista = new List<Inmueble>();

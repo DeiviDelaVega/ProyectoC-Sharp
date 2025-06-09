@@ -1,0 +1,155 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Inmueble
+
+@{
+    ViewBag.Title = "Registrar Inmueble";
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<<link rel="stylesheet" href="~/Content/css/MantInmueble.css" />
+<br />
+<h2 class="text-center">REGISTRAR NUEVO INMUEBLE</h2>
+
+@using (Html.BeginForm("Create", "Inmueble", FormMethod.Post, new { id = "form-crear" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Ingrese los datos del nuevo inmueble</h4>
+        <hr />
+        <br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.titulo)
+                @Html.EditorFor(model => model.titulo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.titulo, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.descripcion)
+                @Html.TextAreaFor(model => model.descripcion, 6, 50, new { @class = "form-control", @style = "resize: vertical;" })
+                @Html.ValidationMessageFor(model => model.descripcion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.direccion)
+                @Html.EditorFor(model => model.direccion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.direccion, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.precio)
+                @Html.TextBoxFor(model => model.precio, new { @class = "form-control", type = "number", min = "0", step = "0.01" })
+                @Html.ValidationMessageFor(model => model.precio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.imagen)
+                @Html.TextBoxFor(model => model.imagen, new
+                {
+                    @class = "form-control",
+                    @placeholder = "Necesita URL de Cloudinary para subir imagen"
+                })
+                @Html.ValidationMessageFor(model => model.imagen, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.estado)
+                @Html.DropDownListFor(model => model.estado,
+                    new SelectList(new[] {
+                        new { Value = "disponible", Text = "Disponible" },
+                        new { Value = "ocupado", Text = "Ocupado" }
+                    }, "Value", "Text"),
+                    "Seleccione estado",
+                    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-12 text-center mt-3">
+            <a href="@Url.Action("SubirImagenCloudinary", "Cloudinary")"
+               target="_blank"
+               class="btn btn-dark">
+                Subir Imagen a Cloudinary
+            </a>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.fecharegistro)
+                @Html.TextBoxFor(model => model.fecharegistro, "{0:yyyy-MM-dd}", new
+                {
+                    @class = "form-control",
+                    type = "date",
+                    value = DateTime.Now.ToString("yyyy-MM-dd")
+                })
+                @Html.ValidationMessageFor(model => model.fecharegistro, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="button-group-container">
+            <button type="submit" class="btn btn-dark" onclick="return confirmarCreacion()">Registrar</button>
+            @Html.ActionLink("Cancelar", "ListInmuebles", null, new { @class = "btn btn-secondary button-spacer" })
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmarCreacion() {
+        Swal.fire({
+            title: '¿Registrar nuevo inmueble?',
+            text: "Se guardará el nuevo registro en la base de datos.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, registrar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-crear').submit();
+            }
+        });
+        return false;
+    }
+
+    @if (ViewBag.Creado != null && ViewBag.Creado == false)
+    {
+        <text>
+            Swal.fire({
+                title: 'Error al Registrar',
+                text: 'No se pudo registrar el inmueble. Verifique los datos ingresados.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        </text>
+    }
+
+    @if (ViewBag.Creado != null && ViewBag.Creado == true)
+    {
+        <text>
+            Swal.fire({
+                title: '¡Registro exitoso!',
+                text: 'El inmueble se ha registrado correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        </text>
+    }
+</script>
