@@ -9,7 +9,7 @@
     @Html.Partial("_HeaderNav")
 </div>
 
-<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<link rel="stylesheet" href="~/Content/css/MantInmueble.css" />
 <br />
 <h2 class="text-center">EDITAR INMUEBLE @Model.id_inmueble</h2>
 
@@ -34,7 +34,7 @@
 
         <div class="form-group col-md-6">
             @Html.LabelFor(model => model.descripcion)
-            @Html.EditorFor(model => model.descripcion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.TextAreaFor(model => model.descripcion, 6, 50, new { @class = "form-control", @style = "resize: vertical;" })
             @Html.ValidationMessageFor(model => model.descripcion, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -48,7 +48,7 @@
 
         <div class="form-group col-md-6">
             @Html.LabelFor(model => model.precio)
-            @Html.EditorFor(model => model.precio, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.TextBoxFor(model => model.precio, new { @class = "form-control", type = "number", min = "0", step = "0.01" })
             @Html.ValidationMessageFor(model => model.precio, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -63,7 +63,12 @@
 
         <div class="form-group col-md-6">
             @Html.LabelFor(model => model.estado)
-            @Html.EditorFor(model => model.estado, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DropDownListFor(model => model.estado,
+                new SelectList(new[] {
+                    new { Value = "disponible", Text = "Disponible" },
+                    new { Value = "ocupado", Text = "Ocupado" }
+                }, "Value", "Text", Model.estado),
+                new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
         </div>
     </div>

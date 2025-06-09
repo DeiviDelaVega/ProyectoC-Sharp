@@ -9,12 +9,14 @@
     @Html.Partial("_HeaderNav")
 </div>
 
-<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<link rel="stylesheet" href="~/Content/css/MantInmueble.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <br />
 <div class="list-clientes-container">
     <h2 class="section-title"><strong>MANTENIMIENTO DE INMUEBLES</strong></h2>
+
+
 
     @using (Html.BeginForm())
     {
@@ -28,6 +30,11 @@
             <input type="submit" value="Consultar Inmuebles" class="btn-consultar" />
         </div>
     }
+    <div class="boton-crear-container">
+        <a href="@Url.Action("Create", "Inmueble")" class="btn btn-success btn-lg">
+            <i class="fa fa-plus"></i> Crear nuevo Inmueble
+        </a>
+    </div>
 
     <table class="table">
         <tr>
@@ -35,6 +42,7 @@
             <th>@Html.DisplayNameFor(model => model.First().titulo)</th>
             <th>@Html.DisplayNameFor(model => model.First().direccion)</th>
             <th>@Html.DisplayNameFor(model => model.First().precio)</th>
+            <th>@Html.DisplayNameFor(model => model.First().imagen)</th>
             <th>@Html.DisplayNameFor(model => model.First().estado)</th>
             <th>@Html.DisplayNameFor(model => model.First().fecharegistro)</th>
             <th>Acciones</th>
@@ -47,6 +55,11 @@
                 <td>@item.titulo</td>
                 <td>@item.direccion</td>
                 <td>@item.precio.ToString("C")</td>
+                <td>
+                    <div style="max-width: 200px; overflow-x: auto; white-space: nowrap;">
+                        @item.imagen
+                    </div>
+                </td>
                 <td>@item.estado</td>
                 <td>@item.fecharegistro.ToString("dd/MM/yyyy")</td>
                 <td>
@@ -62,6 +75,8 @@
                 </td>
             </tr>
         }
+
+
     </table>
 
     <!-- Paginación -->

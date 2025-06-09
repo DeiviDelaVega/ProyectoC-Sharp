@@ -267,3 +267,7 @@ button.btn-dark:hover {
 .form-control[style*="width"] {
     width: auto !important;
 }
+
+.boton-crear-container {
+    margin-bottom: 20px;
+}

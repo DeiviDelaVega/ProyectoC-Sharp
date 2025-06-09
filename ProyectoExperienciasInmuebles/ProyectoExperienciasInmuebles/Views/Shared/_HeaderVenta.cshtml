@@ -13,18 +13,43 @@
 </head>
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-custom">
-        @{
-            string currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-            string currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-        }
-        <div class="container">
-            <a class="navbar-brand" href="#" style="font-size: 24px"><strong>Monterrico Polo Aparts</strong></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fs-3 fw-bold" href="@Url.Action("MenuPrincipal", "PrincipalCliente")" style="font-size: 28px;">
+                Monterrico Polo Aparts
+            </a>
+
+            @if (ViewBag.ClienteNombreCompleto != null)
+            {
+                <div class="d-flex align-items-center gap-3 text-white fs-5">
+                    <span>Bienvenido, @ViewBag.ClienteNombreCompleto</span>
+                    <a href="@Url.Action("CerrarSesion", "Login")"
+                       class="btn btn-danger btn-sm"
+                       style="min-width: 120px; font-size: 1rem;"
+                       onclick="return confirm('¿Estás seguro que quieres cerrar sesión?');">
+                        Cerrar Sesión
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-white fs-5">Para reservar debes iniciar sesión:</span>
+                    <a href="@Url.Action("Login", "Login")"
+                       class="btn btn-success btn-sm"
+                       style="min-width: 120px; font-size: 1rem;">
+                        Iniciar Sesión
+                    </a>
+                </div>
+            }
+
+            <button class="navbar-toggler ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
     </nav>
+</header>
+
 </header>
 
 <div id="carouselInmuebles" class="carousel slide" data-bs-ride="carousel">

@@ -17,7 +17,12 @@ namespace ProyectoExperienciasInmuebles.Controllers
 
         public ActionResult ListInmuebles(DateTime? fecha1 = null, DateTime? fecha2 = null, string estado = null, int p = 0, int? startPageDisplay = null)
             {
-                var inmuebles = db.ListarInmueblesXFechas(fecha1, fecha2, estado).ToList();
+            //Comprueba ID_USUARIO
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            var inmuebles = db.ListarInmueblesXFechas(fecha1, fecha2, estado).ToList();
                 int total = inmuebles.Count();
                 int filasPorPagina = 5;
                 int totalPaginas = (total + filasPorPagina - 1) / filasPorPagina;
@@ -148,6 +153,35 @@ namespace ProyectoExperienciasInmuebles.Controllers
             // Redirige a ListClientes, preservando el estado
             return RedirectToAction("ListInmuebles", new { fecha1 = fecha1, fecha2 = fecha2, p = p, startPageDisplay = startPageDisplay });
         }
+
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Inmueble reg)
+        {
+            if (ModelState.IsValid)
+            {
+                bool creado = db.Registrar(reg);
+                if (creado)
+                {
+                    TempData["Mensaje"] = "Inmueble registrado correctamente";
+                    return RedirectToAction("ListInmuebles");
+                }
+                else
+                {
+                    ViewBag.Error = "No se pudo registrar el inmueble.";
+                }
+            }
+
+            return View(reg);
+        }
+
 
     }
 

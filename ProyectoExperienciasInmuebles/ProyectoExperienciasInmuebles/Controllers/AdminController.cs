@@ -11,6 +11,11 @@ namespace ProyectoExperienciasInmuebles.Controllers
         // GET: Admin
         public ActionResult Index()
         {
+
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
     }

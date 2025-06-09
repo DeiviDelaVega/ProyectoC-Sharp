@@ -25,6 +25,15 @@ namespace ProyectoExperienciasInmuebles.Controllers
                 int p = 0,
                 int? startPageDisplay = null)
             {
+            // Obtener el nombre del cliente
+            int? idCliente = Session["ID_Cliente"] as int?;
+            if (idCliente.HasValue)
+            {
+                DAOCliente daoCliente = new DAOCliente();
+                var cliente = daoCliente.Buscar(idCliente.Value);
+                ViewBag.ClienteNombreCompleto = cliente.nombre + " " + cliente.apellido;
+            }
+
                 var inmuebles = db.ListarInmueblesTienda(fecha1, fecha2, estado).ToList();
 
                 // FILTROS ADICIONALES
@@ -67,6 +76,8 @@ namespace ProyectoExperienciasInmuebles.Controllers
                 var inmueblesPaginados = inmuebles.Skip(p * filasPorPagina).Take(filasPorPagina);
                 return View(inmueblesPaginados);
             }
+
+
 
         public ActionResult ListarPorEstado(string estado)
         {
