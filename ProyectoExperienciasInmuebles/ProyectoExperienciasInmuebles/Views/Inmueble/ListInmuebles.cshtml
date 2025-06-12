@@ -82,10 +82,10 @@
     <!-- Paginación -->
     <div class="mt-4">
         @{
-            int totalPaginas = ViewBag.totalPaginas;
-            int p = ViewBag.p;
-            int startPageDisplay = ViewBag.startPageDisplay;
-            int pagesToShow = ViewBag.pagesToShow;
+            int totalPaginas = ViewBag.totalPaginas; // Total de páginas
+            int p = ViewBag.p; // Página actual
+            int startPageDisplay = ViewBag.startPageDisplay; // Inicio del bloque
+            int pagesToShow = ViewBag.pagesToShow; // Cantidad de botones a mostrar
 
             int actualStartPage = startPageDisplay;
             int actualEndPage = Math.Min(startPageDisplay + pagesToShow - 1, totalPaginas - 1);
@@ -97,40 +97,67 @@
             }
             else if (actualEndPage - actualStartPage + 1 < pagesToShow)
             {
-                actualStartPage = Math.Max(0, actualEndPage - pagesToShow + 1);
+                actualStartPage = Math.Max(0, totalPaginas - pagesToShow);
+                actualEndPage = totalPaginas - 1;
             }
         }
 
-        @if (actualStartPage > 0)
+        @* Botón "Prev" *@
+        @if (p > 0)
         {
-            int newStartPageDisplay = Math.Max(0, actualStartPage - pagesToShow);
-            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = p, startPageDisplay = newStartPageDisplay })"
-               class="btn btn-outline-secondary m-1">&laquo; Prev</a>
+            int newPForPrev = p - 1;
+            int newStartPageDisplayForPrev = startPageDisplay;
+            if (newPForPrev < startPageDisplay)
+            {
+                newStartPageDisplayForPrev = newPForPrev;
+            }
+            newStartPageDisplayForPrev = Math.Max(0, newStartPageDisplayForPrev);
+
+            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = newPForPrev, startPageDisplay = newStartPageDisplayForPrev })"
+               class="btn btn-outline-secondary m-1">
+                &laquo; Prev
+            </a>
         }
         else
         {
-            <button class="btn btn-outline-secondary m-1" disabled>&laquo; Prev</button>
+            <button class="btn btn-outline-secondary m-1" disabled>
+                &laquo; Prev
+            </button>
         }
 
+        @* Botones de número de página *@
         @for (int i = actualStartPage; i <= actualEndPage; i++)
         {
-            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = i, startPageDisplay = startPageDisplay })"
-               class="btn @(i == p ? "btn-dark" : "btn-outline-secondary") m-1">@(i + 1)</a>
+            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = i, startPageDisplay = actualStartPage })"
+               class="btn @(i == p ? "btn-dark" : "btn-outline-secondary") m-1">
+                @(i + 1)
+            </a>
         }
 
-        @if (actualEndPage < totalPaginas - 1)
+        @* Botón "Next" *@
+        @if (p < totalPaginas - 1)
         {
-            int newStartPageDisplay = Math.Max(0, actualStartPage + pagesToShow);
-            newStartPageDisplay = Math.Min(newStartPageDisplay, totalPaginas - pagesToShow);
+            int newPForNext = p + 1;
+            int newStartPageDisplayForNext = startPageDisplay;
+            if (newPForNext > actualEndPage)
+            {
+                newStartPageDisplayForNext = Math.Min(newPForNext - pagesToShow + 1, totalPaginas - pagesToShow);
+                newStartPageDisplayForNext = Math.Max(0, newStartPageDisplayForNext);
+            }
 
-            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = p, startPageDisplay = newStartPageDisplay })"
-               class="btn btn-outline-secondary m-1">Next &raquo;</a>
+            <a href="@Url.Action("ListInmuebles", new { fecha1 = ViewBag.Fecha1, fecha2 = ViewBag.Fecha2, p = newPForNext, startPageDisplay = newStartPageDisplayForNext })"
+               class="btn btn-outline-secondary m-1">
+                Next &raquo;
+            </a>
         }
         else
         {
-            <button class="btn btn-outline-secondary m-1" disabled>Next &raquo;</button>
+            <button class="btn btn-outline-secondary m-1" disabled>
+                Next &raquo;
+            </button>
         }
     </div>
+
 </div>
 <br />
 
