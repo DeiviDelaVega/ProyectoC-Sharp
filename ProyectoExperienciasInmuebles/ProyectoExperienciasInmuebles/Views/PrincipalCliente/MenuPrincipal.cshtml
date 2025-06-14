@@ -270,7 +270,8 @@
             }
             else if (actualEndPage - actualStartPage + 1 < pagesToShow)
             {
-                actualStartPage = Math.Max(0, actualEndPage - pagesToShow + 1);
+                actualStartPage = Math.Max(0, totalPaginas - pagesToShow);
+                actualEndPage = totalPaginas - 1;
             }
 
             string titulo = Request.QueryString["titulo"];
@@ -279,30 +280,50 @@
             string estado = Request.QueryString["estado"];
         }
 
-        @if (actualStartPage > 0)
+        @* Botón "Prev" *@
+        @if (p > 0)
         {
-            int newStartPageDisplay = Math.Max(0, actualStartPage - pagesToShow);
-            <a href="@Url.Action("MenuPrincipal", new { p = p, startPageDisplay = newStartPageDisplay, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })" class="btn btn-outline-secondary m-1">&laquo; Prev</a>
+            int newPForPrev = p - 1;
+            int newStartPageDisplayForPrev = startPageDisplay;
+            if (newPForPrev < startPageDisplay)
+            {
+                newStartPageDisplayForPrev = newPForPrev;
+            }
+            newStartPageDisplayForPrev = Math.Max(0, newStartPageDisplayForPrev);
+
+            <a href="@Url.Action("MenuPrincipal", new { p = newPForPrev, startPageDisplay = newStartPageDisplayForPrev, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })"
+               class="btn btn-outline-secondary m-1">&laquo; Prev</a>
         }
         else
         {
             <button class="btn btn-outline-secondary m-1" disabled>&laquo; Prev</button>
         }
 
+        @* Botones numéricos *@
         @for (int i = actualStartPage; i <= actualEndPage; i++)
         {
-            <a href="@Url.Action("MenuPrincipal", new { p = i, startPageDisplay = startPageDisplay, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })"
+            <a href="@Url.Action("MenuPrincipal", new { p = i, startPageDisplay = actualStartPage, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })"
                class="btn @(i == p ? "btn-dark" : "btn-outline-secondary") m-1">@(i + 1)</a>
         }
 
-        @if (actualEndPage < totalPaginas - 1)
+        @* Botón "Next" *@
+        @if (p < totalPaginas - 1)
         {
-            int newStartPageDisplay = Math.Min(totalPaginas - pagesToShow, actualStartPage + pagesToShow);
-            <a href="@Url.Action("MenuPrincipal", new { p = p, startPageDisplay = newStartPageDisplay, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })" class="btn btn-outline-secondary m-1">Next &raquo;</a>
+            int newPForNext = p + 1;
+            int newStartPageDisplayForNext = startPageDisplay;
+            if (newPForNext > actualEndPage)
+            {
+                newStartPageDisplayForNext = Math.Min(newPForNext - pagesToShow + 1, totalPaginas - pagesToShow);
+                newStartPageDisplayForNext = Math.Max(0, newStartPageDisplayForNext);
+            }
+
+            <a href="@Url.Action("MenuPrincipal", new { p = newPForNext, startPageDisplay = newStartPageDisplayForNext, titulo = titulo, precioDesde = precioDesde, precioHasta = precioHasta, estado = estado })"
+               class="btn btn-outline-secondary m-1">Next &raquo;</a>
         }
         else
         {
             <button class="btn btn-outline-secondary m-1" disabled>Next &raquo;</button>
         }
     </div>
+
 </div>

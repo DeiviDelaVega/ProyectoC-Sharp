@@ -34,7 +34,7 @@ namespace ProyectoExperienciasInmuebles.Controllers
                 ViewBag.totalPaginas = totalPaginas;
 
                 // --- LÓGICA PARA CONTROLAR EL RANGO VISIBLE DE PÁGINAS ---
-                int pagesToShow = 5;
+                int pagesToShow = 4;
                 int currentStartPage;
 
                 if (startPageDisplay.HasValue)
