@@ -11,6 +11,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-custom">
         <div class="container d-flex justify-content-between align-items-center">
@@ -50,24 +51,29 @@
     </nav>
 </header>
 
-</header>
+@{
+    var ocultarCarrusel = ViewBag.OcultarCarrusel as bool? ?? false;
+}
 
-<div id="carouselInmuebles" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="~/Content/image/inmueble.jpg" class="d-block w-100" alt="Imagen 1">
+@if (!ocultarCarrusel)
+{
+    <div id="carouselInmuebles" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/Content/image/inmueble.jpg" class="d-block w-100" alt="Imagen 1">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/image/inmueble1.jpg" class="d-block w-100" alt="Imagen 2">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/image/inmueble2.jpg" class="d-block w-100" alt="Imagen 3">
+            </div>
         </div>
-        <div class="carousel-item">
-            <img src="~/Content/image/inmueble1.jpg" class="d-block w-100" alt="Imagen 2">
-        </div>
-        <div class="carousel-item">
-            <img src="~/Content/image/inmueble2.jpg" class="d-block w-100" alt="Imagen 3">
-        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselInmuebles" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselInmuebles" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselInmuebles" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselInmuebles" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-</div>
+}
