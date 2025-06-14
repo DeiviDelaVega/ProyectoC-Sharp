@@ -1,0 +1,64 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Inmueble
+
+@{
+    ViewBag.Title = "Detalle Reserva";
+    Layout = null;
+    ViewBag.OcultarCarrusel = true;
+}
+
+<div>
+    @Html.Partial("_HeaderVenta")
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content/css/DetalleReserva.css" />
+
+<div class="card card-custom">
+    <img src="@Model.imagen" alt="Imagen del Inmueble" class="img-inmueble" />
+
+    <div class="p-4">
+        <h2 class="titulo">@Model.titulo</h2>
+        <hr />
+
+        <div class="detalle-item">
+            <i class="fas fa-align-left"></i>
+            <strong>Descripción:</strong> @Model.descripcion
+        </div>
+
+        <div class="detalle-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <strong>Dirección:</strong> @Model.direccion
+        </div>
+
+        <div class="detalle-item">
+            <i class="fas fa-dollar-sign"></i>
+            <strong>Precio:</strong> S/. @Model.precio
+        </div>
+
+        <div class="detalle-item">
+            <i class="fas fa-check-circle"></i>
+            <strong>Estado:</strong> @Model.estado
+        </div>
+
+        <div class="detalle-item">
+            <i class="fas fa-calendar-alt"></i>
+            <strong>Fecha de Registro:</strong> @Model.fecharegistro.ToString("dd/MM/yyyy")
+        </div>
+
+        <div class="botones-acciones text-center">
+            <a href="@Url.Action("MenuPrincipal", "PrincipalCliente", new {
+                    p = ViewBag.PaginaAnterior,
+                    titulo = ViewBag.Titulo,
+                    precioDesde = ViewBag.PrecioDesde,
+                    precioHasta = ViewBag.PrecioHasta,
+                    fecha1 = ViewBag.Fecha1,
+                    fecha2 = ViewBag.Fecha2,
+                    estado = ViewBag.Estado
+                })#inmuebles" class="btn btn-retornar btn-lg">
+                ← Retornar
+            </a>
+            @Html.ActionLink("Reservar Ahora", "RealizarReserva", new { id = Model.id_inmueble}, new { @class = "btn btn-reservar btn-lg" })
+        </div>
+    </div>
+</div>
