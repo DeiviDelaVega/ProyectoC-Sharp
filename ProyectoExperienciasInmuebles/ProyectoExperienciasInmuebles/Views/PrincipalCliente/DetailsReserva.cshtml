@@ -41,11 +41,6 @@
             <strong>Estado:</strong> @Model.estado
         </div>
 
-        <div class="detalle-item">
-            <i class="fas fa-calendar-alt"></i>
-            <strong>Fecha de Registro:</strong> @Model.fecharegistro.ToString("dd/MM/yyyy")
-        </div>
-
         <div class="botones-acciones text-center">
             <a href="@Url.Action("MenuPrincipal", "PrincipalCliente", new {
                     p = ViewBag.PaginaAnterior,
@@ -58,7 +53,8 @@
                 })#inmuebles" class="btn btn-retornar btn-lg">
                 ← Retornar
             </a>
-            @Html.ActionLink("Reservar Ahora", "RealizarReserva", new { id = Model.id_inmueble}, new { @class = "btn btn-reservar btn-lg" })
+            @Html.ActionLink("Reservar Ahora", "ReservarInmueble", "PrincipalCliente", new { id = Model.id_inmueble }, new { @class = "btn btn-reservar btn-lg" })
+
         </div>
     </div>
 </div>

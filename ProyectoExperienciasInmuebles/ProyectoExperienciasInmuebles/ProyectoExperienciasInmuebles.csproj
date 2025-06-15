@@ -52,6 +52,9 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -188,7 +191,9 @@
     <Compile Include="Models\DAO.cs" />
     <Compile Include="Models\DAOCliente.cs" />
     <Compile Include="Models\DAOInmueble.cs" />
+    <Compile Include="Models\DAOReserva.cs" />
     <Compile Include="Models\Inmueble.cs" />
+    <Compile Include="Models\Reserva.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -227,12 +232,17 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Compile Include="Models\CloudinaryConfig.cs" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -273,6 +283,8 @@
     <Content Include="Views\Cloudinary\SubirImagenCloudinary.cshtml" />
     <Content Include="Views\Inmueble\Create.cshtml" />
     <Content Include="Views\PrincipalCliente\DetailsReserva.cshtml" />
+    <Content Include="Views\PrincipalCliente\ReservarInmueble.cshtml" />
+    <Content Include="Views\PrincipalCliente\ReservaPdf.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

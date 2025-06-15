@@ -11,6 +11,7 @@ namespace ProyectoExperienciasInmuebles.Controllers
     public class PrincipalClienteController : Controller
     {
         DAOInmueble db = new DAOInmueble();
+        DAOReserva DAOReserva = new DAOReserva();
 
         // PRINCIPALCLIENTE
         public ActionResult MenuPrincipal(
@@ -111,6 +112,88 @@ namespace ProyectoExperienciasInmuebles.Controllers
             Inmueble reg = db.ListarInmueblesTienda(null, null, null).FirstOrDefault(x => x.id_inmueble == id);
             return View(reg);
         }
+
+        public ActionResult ReservarInmueble(int id) {
+
+            int? idCliente = Session["ID_Cliente"] as int?;
+            if (idCliente.HasValue)
+            {
+                DAOCliente daoCliente = new DAOCliente();
+                var cliente = daoCliente.Buscar(idCliente.Value);
+                ViewBag.ClienteNombreCompleto = cliente.nombre + " " + cliente.apellido;
+            }
+
+            var inmueble = db.BuscarInmueble(id);
+            ViewBag.Inmueble = inmueble;
+            return View(); 
+        }
+
+        [HttpPost]
+        public ActionResult ReservarInmueble(int id_inmueble, DateTime fechainicio, DateTime fechafin, int pagototal)
+        {
+            int? idCliente = Session["ID_Cliente"] as int?;
+            if (!idCliente.HasValue)
+                return RedirectToAction("Login", "Acceso");
+
+            Reserva nueva = new Reserva
+            {
+                IdCliente = idCliente.Value,
+                IdInmueble = id_inmueble,
+                fechaInicio = fechainicio,
+                fechaFin = fechafin,
+                estado = "pendiente",
+                pagototal = pagototal
+            };
+
+            bool ok = DAOReserva.Registrar(nueva);
+
+            if (ok)
+            {
+                TempData["ReservaExitosa"] = true;
+                TempData["idReserva"] = nueva.IdReserva;
+                return RedirectToAction("ReservarInmueble", new { id = id_inmueble });
+            }
+
+
+
+            // 🔥 SOLUCIÓN AQUÍ - volver a cargar datos del cliente para la vista
+            if (idCliente.HasValue)
+            {
+                DAOCliente daoCliente = new DAOCliente();
+                var cliente = daoCliente.Buscar(idCliente.Value);
+                ViewBag.ClienteNombreCompleto = cliente.nombre + " " + cliente.apellido;
+            }
+
+            var inmueble = db.BuscarInmueble(id_inmueble);
+            ViewBag.Inmueble = inmueble;
+
+            if (ok)
+                ViewBag.ReservaExitosa = true;
+            else
+                ViewBag.ReservaFallida = true;
+
+            return View(nueva);
+        }
+
+        public ActionResult GenerarComprobantePDF(int idReserva)
+        {
+            // Buscar reserva por ID (debes tener un método DAO para eso)
+            var reserva = DAOReserva.BuscarPorId(idReserva); // crea este método si no existe
+            var inmueble = db.BuscarInmueble(reserva.IdInmueble);
+            var cliente = new DAOCliente().Buscar(reserva.IdCliente);
+
+            ViewBag.Inmueble = inmueble;
+            ViewBag.ClienteNombreCompleto = cliente.nombre + " " + cliente.apellido;
+
+            return new Rotativa.ViewAsPdf("ReservaPdf", reserva)
+            {
+                FileName = $"Reserva_{reserva.IdReserva}.pdf",
+                PageSize = Rotativa.Options.Size.A4,
+                PageOrientation = Rotativa.Options.Orientation.Portrait
+            };
+        }
+
+
     }
 }
 
