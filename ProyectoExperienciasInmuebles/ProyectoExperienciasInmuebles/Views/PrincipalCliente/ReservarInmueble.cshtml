@@ -1,0 +1,167 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Reserva
+
+@{
+    ViewBag.Title = "Reservar Inmueble";
+    Layout = null;
+    ViewBag.OcultarCarrusel = true;
+    var inmueble = ViewBag.Inmueble as ProyectoExperienciasInmuebles.Models.Inmueble;
+    var idReserva = TempData["idReserva"];
+}
+
+@Html.Partial("_HeaderVenta")
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #f2f2f2;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card-reserva {
+        background-color: #fff;
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+        .card-reserva h2 {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .card-reserva .info-inmueble {
+            margin-bottom: 25px;
+        }
+
+            .card-reserva .info-inmueble p {
+                margin: 4px 0;
+                font-size: 16px;
+            }
+
+    .form-group label {
+        font-weight: 600;
+    }
+
+    .btn-confirmar {
+        background-color: #28a745;
+        color: white;
+        border: none;
+    }
+
+        .btn-confirmar:hover {
+            background-color: #218838;
+        }
+
+    .btn-cancelar {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+
+        .btn-cancelar:hover {
+            background-color: #5a6268;
+        }
+
+    .alert-info {
+        max-width: 800px;
+        margin: 10px auto;
+        font-size: 16px;
+    }
+</style>
+
+<div class="card-reserva">
+    <h2>Reservar: @inmueble.titulo</h2>
+
+    <div class="info-inmueble">
+        <p><i class="fas fa-align-left"></i> <strong>Descripción:</strong> @inmueble.descripcion</p>
+        <p><i class="fas fa-map-marker-alt"></i> <strong>Dirección:</strong> @inmueble.direccion</p>
+        <p><i class="fas fa-dollar-sign"></i> <strong>Precio por noche:</strong> S/. @inmueble.precio.ToString("F2")</p>
+    </div>
+
+    @using (Html.BeginForm("ReservarInmueble", "PrincipalCliente", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("id_inmueble", inmueble.id_inmueble)
+
+        <div class="form-group mb-3">
+            <label>Fecha de inicio</label>
+            <input type="date" name="fechainicio" class="form-control" required />
+        </div>
+        <div class="form-group mb-3">
+            <label>Fecha de fin</label>
+            <input type="date" name="fechafin" class="form-control" required />
+        </div>
+        <div class="form-group mb-4">
+            <label>Total a pagar:</label>
+            <input type="text" id="totalPagar" class="form-control" readonly />
+            <input type="hidden" id="pagototal" name="pagototal" />
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="@Url.Action("MenuPrincipal", "PrincipalCliente")" class="btn btn-cancelar">Cancelar</a>
+            <button type="submit" class="btn btn-confirmar">Confirmar Reserva</button>
+        </div>
+    }
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const precioPorDia = @inmueble.precio;
+    const inputInicio = document.querySelector('input[name="fechainicio"]');
+    const inputFin = document.querySelector('input[name="fechafin"]');
+    const totalPagar = document.getElementById('totalPagar');
+    const pagototalInput = document.getElementById('pagototal');
+
+    function calcularTotal() {
+        const inicio = new Date(inputInicio.value);
+        const fin = new Date(inputFin.value);
+        if (!isNaN(inicio) && !isNaN(fin) && fin > inicio) {
+            const dias = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24));
+            const total = dias * precioPorDia;
+            totalPagar.value = "S/. " + total.toFixed(2);
+            pagototalInput.value = Math.round(total);
+        } else {
+            totalPagar.value = "";
+            pagototalInput.value = "";
+        }
+    }
+
+    inputInicio.addEventListener("change", calcularTotal);
+    inputFin.addEventListener("change", calcularTotal);
+
+    @if (TempData["ReservaExitosa"] != null && TempData["ReservaExitosa"].ToString() == "True")
+    {
+        <text>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: '¡Reserva Confirmada!',
+                text: 'Tu reserva se ha realizado exitosamente.',
+                icon: 'success',
+                confirmButtonText: 'Descargar comprobante',
+                confirmButtonColor: '#28a745'
+            }).then(() => {
+                const link = document.createElement('a');
+                link.href = '@Url.Action("GenerarComprobantePDF", "PrincipalCliente", new { idReserva = idReserva })';
+                link.download = '';
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                setTimeout(function () {
+                    window.location.href = '@Url.Action("MenuPrincipal", "PrincipalCliente")';
+                }, 1000);
+            });
+        });
+        </text>
+    }
+</script>

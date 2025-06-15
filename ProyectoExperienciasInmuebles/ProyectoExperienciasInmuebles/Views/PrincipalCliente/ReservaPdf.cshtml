@@ -1,0 +1,78 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Reserva
+
+@{
+    ViewBag.Title = "ReservaPdf";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Comprobante de Reserva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 40px;
+            background-color: #f9f9f9;
+        }
+
+        .reserva-container {
+            background-color: #fff;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .datos-reserva p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .datos-reserva strong {
+            color: #2c3e50;
+        }
+
+        .img-inmueble {
+            display: block;
+            margin: 30px auto 0 auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        hr {
+            margin: 20px 0;
+            border: 0;
+            border-top: 2px solid #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="reserva-container">
+        <h2>Comprobante de Reserva</h2>
+        <hr />
+        <div class="datos-reserva">
+            <p><strong>Cliente:</strong> @ViewBag.ClienteNombreCompleto</p>
+            <p><strong>Departamento:</strong> @ViewBag.Inmueble.titulo</p>
+            <p><strong>Dirección:</strong> @ViewBag.Inmueble.direccion</p>
+            <p><strong>Descripción:</strong> @ViewBag.Inmueble.descripcion</p>
+            <p><strong>Fecha de Inicio:</strong> @Model.fechaInicio.ToShortDateString()</p>
+            <p><strong>Fecha de Fin:</strong> @Model.fechaFin.ToShortDateString()</p>
+            <p><strong>Total Pagado:</strong> S/. @Model.pagototal.ToString("F2")</p>
+            <p><strong>Fecha de Reserva:</strong> @Model.fechaReserva.ToString("dd/MM/yyyy HH:mm")</p>
+        </div>
+        <img src="@ViewBag.Inmueble.imagen" alt="Imagen del Inmueble" class="img-inmueble" />
+    </div>
+</body>
+</html>
