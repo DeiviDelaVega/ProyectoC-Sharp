@@ -45,6 +45,10 @@
                         @Html.ActionLink("🛠️ Mantenimiento de Clientes", "ListClientes", "Cliente", new { area = "" },
                             new { @class = "nav-link px-3 rounded " + ((currentController == "Cliente" && (currentAction == "ListClientes" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "") })
                     </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("🛠️ Mantenimiento de Reserva", "Index", "Reserva", new { area = "" },
+                            new { @class = "nav-link px-3 rounded " + ((currentController == "Reserva" && (currentAction == "Index" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "") })
+                    </li>
                 </ul>
             </div>
         </div>

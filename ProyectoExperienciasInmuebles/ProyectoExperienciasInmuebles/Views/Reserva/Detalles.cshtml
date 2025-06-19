@@ -1,0 +1,76 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Reserva
+
+@{
+    ViewBag.Title = "Detalles de Reserva";
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantInmueble.css" />
+<br />
+<h2 class="text-center">DETALLES DE LA RESERVA @Model.IdReserva</h2>
+
+<div class="form-horizontal">
+    <h4 class="text-center">Consulta de datos</h4>
+    <hr />
+    <br />
+
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">ID Reserva:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.IdReserva)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">ID Cliente:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.IdCliente)</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">ID Inmueble:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.IdInmueble)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Fecha Inicio:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.fechaInicio)</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">Fecha Fin:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.fechaFin)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Fecha de Reserva:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.fechaReserva)</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <label class="control-label">Estado:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.estado)</p>
+            </div>
+            <div class="col-md-6">
+                <label class="control-label">Pago Total:</label>
+                <p class="form-control">@Html.DisplayFor(model => model.pagototal)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-group-container">
+        @Html.ActionLink("Retornar", "Index", new
+        {
+            fecha1 = ViewBag.Fecha1,
+            fecha2 = ViewBag.Fecha2,
+            p = ViewBag.p,
+            startPageDisplay = ViewBag.startPageDisplay
+        }, new { @class = "btn btn-secondary" })
+    </div>
+</div>
