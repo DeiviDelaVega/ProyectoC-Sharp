@@ -23,6 +23,16 @@
             {
                 <div class="d-flex align-items-center gap-3 text-white fs-5">
                     <span>Bienvenido, @ViewBag.ClienteNombreCompleto</span>
+                    <a href="@Url.Action("MisReservas", "PrincipalCliente")"
+                       class="btn btn-outline-light btn-sm"
+                       style="min-width: 140px; font-size: 1rem;">
+                        Mis Reservas
+                    </a>
+                    <a href="@Url.Action("MenuPrincipal", "PrincipalCliente")"
+                       class="btn btn-outline-light btn-sm"
+                       style="min-width: 140px; font-size: 1rem;">
+                        Catalogo inmuebles
+                    </a>
                     <a href="@Url.Action("CerrarSesion", "Login")"
                        class="btn btn-danger btn-sm"
                        style="min-width: 120px; font-size: 1rem;"
@@ -30,6 +40,7 @@
                         Cerrar Sesión
                     </a>
                 </div>
+               
             }
             else
             {
