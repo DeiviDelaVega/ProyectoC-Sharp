@@ -173,6 +173,43 @@ namespace ProyectoExperienciasInmuebles.Models
             }
         }
 
+        public List<Reserva> ListarPorCliente(int idCliente)
+        {
+            List<Reserva> reservas = new List<Reserva>();
+
+            using (SqlCommand cmd = new SqlCommand("usp_listar_reservas_por_cliente", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@idCliente", idCliente);
+
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    Reserva r = new Reserva
+                    {
+                        IdReserva = Convert.ToInt32(dr["IdReserva"]),
+                        IdCliente = Convert.ToInt32(dr["IdCliente"]),
+                        IdInmueble = Convert.ToInt32(dr["IdInmueble"]),
+                        fechaInicio = Convert.ToDateTime(dr["fechaInicio"]),
+                        fechaFin = Convert.ToDateTime(dr["fechaFin"]),
+                        estado = dr["estado"].ToString(),
+                        fechaReserva = Convert.ToDateTime(dr["fechaReserva"]),
+                        pagototal = Convert.ToInt32(dr["pagototal"])
+                    };
+
+                    reservas.Add(r);
+                }
+
+                cn.Close();
+            }
+
+            return reservas;
+        }
+
+
+
 
     }
 }

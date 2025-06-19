@@ -193,6 +193,30 @@ namespace ProyectoExperienciasInmuebles.Controllers
             };
         }
 
+        public ActionResult MisReservas()
+        {
+            int? idCliente = Session["ID_Cliente"] as int?;
+
+            if (!idCliente.HasValue)
+                return RedirectToAction("Login", "Login");
+
+            DAOReserva dao = new DAOReserva();
+            var reservas = dao.ListarPorCliente(idCliente.Value);
+
+            // 🔹 Esta parte es clave para mostrar el nombre en _HeaderVenta
+            DAOCliente daoCliente = new DAOCliente();
+            var cliente = daoCliente.Buscar(idCliente.Value);
+            ViewBag.Cliente = cliente; // Para usarlo como objeto si lo necesitas
+            ViewBag.ClienteNombreCompleto = cliente.nombre + " " + cliente.apellido;
+
+            return View("MisReservas", reservas);
+        }
+
+
+
+
+
+
 
     }
 }

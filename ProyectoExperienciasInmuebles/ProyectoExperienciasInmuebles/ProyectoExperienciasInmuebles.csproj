@@ -290,6 +290,7 @@
     <Content Include="Views\Reserva\Detalles.cshtml" />
     <Content Include="Views\Reserva\Crear.cshtml" />
     <Content Include="Views\Reserva\Editar.cshtml" />
+    <Content Include="Views\PrincipalCliente\MisReservas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
