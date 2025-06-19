@@ -1,0 +1,134 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Reserva
+
+@{
+    ViewBag.Title = "Editar Reserva";
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantCliente.css" />
+<br />
+<h2 class="text-center">EDITAR RESERVA @Model.IdReserva</h2>
+
+@using (Html.BeginForm("Editar", "Reserva", FormMethod.Post, new { id = "form-actualizar" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Modifica la información registrada</h4>
+        <hr />
+        <br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.IdReserva)
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.IdCliente, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.IdCliente, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IdCliente, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.IdInmueble, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.IdInmueble, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IdInmueble, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.fechaInicio, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.fechaInicio, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.fechaInicio, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.fechaFin, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.fechaFin, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.fechaFin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.estado, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.estado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.fechaReserva, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.fechaReserva, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.fechaReserva, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.pagototal, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.pagototal, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.pagototal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="button-group-container">
+            <button type="submit" class="btn btn-dark" onclick="return confirmarActualizacion()">Actualizar</button>
+            @Html.ActionLink("Retornar", "Index", null, new { @class = "btn btn-secondary button-spacer" })
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmarActualizacion() {
+        Swal.fire({
+            title: '¿Estás seguro de actualizar la reserva?',
+            text: "Esta acción será permanente",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, actualizar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-actualizar').submit();
+            }
+        });
+        return false;
+    }
+
+    @if (ViewBag.Actualizado != null && ViewBag.Actualizado == false)
+    {
+        <text>
+            Swal.fire({
+                title: 'Error de Actualización',
+                text: 'No se pudo actualizar la reserva. Por favor, revise los datos.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        </text>
+    }
+
+    @if (ViewBag.Actualizado != null && ViewBag.Actualizado == true)
+    {
+        <text>
+            Swal.fire({
+                title: '¡Reserva actualizada!',
+                text: 'La reserva se ha actualizado correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        </text>
+    }
+</script>

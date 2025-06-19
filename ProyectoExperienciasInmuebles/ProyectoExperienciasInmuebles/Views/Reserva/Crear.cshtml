@@ -1,0 +1,139 @@
+﻿@model ProyectoExperienciasInmuebles.Models.Reserva
+
+@{
+    ViewBag.Title = "Registrar Reserva";
+    Layout = null;
+}
+
+<div>
+    @Html.Partial("_HeaderNav")
+</div>
+
+<link rel="stylesheet" href="~/Content/css/MantInmueble.css" />
+<br />
+<h2 class="text-center">REGISTRAR NUEVA RESERVA</h2>
+
+@using (Html.BeginForm("Create", "Reserva", FormMethod.Post, new { id = "form-crear" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Ingrese los datos de la nueva reserva</h4>
+        <hr />
+        <br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.IdCliente)
+                @Html.EditorFor(model => model.IdCliente, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IdCliente, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.IdInmueble)
+                @Html.EditorFor(model => model.IdInmueble, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IdInmueble, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.fechaInicio)
+                @Html.TextBoxFor(model => model.fechaInicio, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.fechaInicio, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.fechaFin)
+                @Html.TextBoxFor(model => model.fechaFin, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.fechaFin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.estado)
+                @Html.DropDownListFor(model => model.estado,
+                    new SelectList(new[] {
+                        new { Value = "reservado", Text = "Reservado" },
+                        new { Value = "cancelado", Text = "Cancelado" },
+                        new { Value = "completado", Text = "Completado" }
+                    }, "Value", "Text"),
+                    "Seleccione estado",
+                    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.fechaReserva)
+                @Html.TextBoxFor(model => model.fechaReserva, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", value = DateTime.Now.ToString("yyyy-MM-dd") })
+                @Html.ValidationMessageFor(model => model.fechaReserva, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.pagototal)
+                @Html.TextBoxFor(model => model.pagototal, new { @class = "form-control", type = "number", step = "0.01", min = "0" })
+                @Html.ValidationMessageFor(model => model.pagototal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="button-group-container">
+            <button type="submit" class="btn btn-dark" onclick="return confirmarCreacion()">Registrar</button>
+            @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary button-spacer" })
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmarCreacion() {
+        Swal.fire({
+            title: '¿Registrar nueva reserva?',
+            text: "Se guardará el nuevo registro en la base de datos.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, registrar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-crear').submit();
+            }
+        });
+        return false;
+    }
+
+    @if (ViewBag.Creado != null && ViewBag.Creado == false)
+    {
+        <text>
+            Swal.fire({
+                title: 'Error al Registrar',
+                text: 'No se pudo registrar la reserva. Verifique los datos ingresados.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        </text>
+    }
+
+    @if (ViewBag.Creado != null && ViewBag.Creado == true)
+    {
+        <text>
+            Swal.fire({
+                title: '¡Registro exitoso!',
+                text: 'La reserva se ha registrado correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        </text>
+    }
+</script>
