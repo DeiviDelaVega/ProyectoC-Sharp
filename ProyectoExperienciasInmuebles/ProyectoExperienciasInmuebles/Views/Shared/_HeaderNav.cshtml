@@ -16,15 +16,16 @@
             string currentAction = ViewContext.RouteData.Values["action"]?.ToString();
             string currentController = ViewContext.RouteData.Values["controller"]?.ToString();
         }
-        <div class="container">
+        <div class="container d-flex align-items-center">
             <a class="navbar-brand" href="#" style="font-size: 24px"><strong>Monterrico Polo Aparts</strong></a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
 
-                <ul class="navbar-nav ms-auto">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto d-flex align-items-center w-100 justify-content-center">
                     <li class="nav-item">
                         <a class="nav-link btn btn-danger text-white px-4 rounded ms-3"
                            href="@Url.Action("Logout", "Login")"
@@ -32,23 +33,58 @@
                             🔒 Cerrar Sesión
                         </a>
                     </li>
-                    <li class="nav-item">
+
+                    <li class="nav-item mx-2">
                         @Html.ActionLink("📌 Inicio", "Index", "Admin", new { area = "" },
-                            new { @class = "nav-link px-3 rounded " + (currentAction == "Index" && currentController == "Admin" ? "active" : "") })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("🛠️ Mantenimiento de Inmueble", "ListInmuebles", "Inmueble", new { area = "" },
-                            new { @class = "nav-link px-3 rounded " + ((currentController == "Inmueble" && (currentAction == "ListInmuebles" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "") })
+                            new
+                                 {
+                                @class = "nav-link px-3 rounded " +
+                                (currentAction == "Index" && currentController == "Admin" ? "active" : "")
+                            })
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item mx-2">
+                        @Html.ActionLink("🛠️ Mantenimiento de Inmueble", "ListInmuebles", "Inmueble", new { area = "" },
+                            new
+                                 {
+                                @class = "nav-link px-3 rounded " +
+                                ((currentController == "Inmueble" && (currentAction == "ListInmuebles" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "")
+                            })
+                    </li>
+
+                    <li class="nav-item mx-2">
                         @Html.ActionLink("🛠️ Mantenimiento de Clientes", "ListClientes", "Cliente", new { area = "" },
-                            new { @class = "nav-link px-3 rounded " + ((currentController == "Cliente" && (currentAction == "ListClientes" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "") })
+                            new
+                                 {
+                                @class = "nav-link px-3 rounded " +
+                                ((currentController == "Cliente" && (currentAction == "ListClientes" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "")
+                            })
                     </li>
-                    <li class="nav-item">
+
+                    <li class="nav-item mx-2">
                         @Html.ActionLink("🛠️ Mantenimiento de Reserva", "Index", "Reserva", new { area = "" },
-                            new { @class = "nav-link px-3 rounded " + ((currentController == "Reserva" && (currentAction == "Index" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "") })
+                            new
+                                 {
+                                @class = "nav-link px-3 rounded " +
+                                ((currentController == "Reserva" && (currentAction == "Index" || currentAction == "Details" || currentAction == "Edit")) ? "active" : "")
+                            })
                     </li>
+
+                    <li class="nav-item dropdown mx-2">
+                        <a class="nav-link dropdown-toggle px-3 rounded @(currentController == "Reportes" ? "active" : "")"
+                           href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            📊 Reportes
+                        </a>
+                        <ul class="dropdown-menu text-center">
+                            <li>
+                                @Html.ActionLink("Clientes con más reservas", "ClientesConMasReservas", "Reportes", null, new { @class = "dropdown-item" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Inmuebles más reservados", "InmueblesMasReservados", "Reportes", null, new { @class = "dropdown-item" })
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
             </div>
         </div>

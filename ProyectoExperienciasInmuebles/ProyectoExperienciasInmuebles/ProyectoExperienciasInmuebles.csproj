@@ -184,14 +184,17 @@
     <Compile Include="Controllers\InmuebleController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PrincipalClienteController.cs" />
+    <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\ReservaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cliente.cs" />
+    <Compile Include="Models\ClientesMasReservas.cs" />
     <Compile Include="Models\DAO.cs" />
     <Compile Include="Models\DAOCliente.cs" />
     <Compile Include="Models\DAOInmueble.cs" />
+    <Compile Include="Models\DAOReportes.cs" />
     <Compile Include="Models\DAOReserva.cs" />
     <Compile Include="Models\Inmueble.cs" />
     <Compile Include="Models\Reserva.cs" />
@@ -291,6 +294,7 @@
     <Content Include="Views\Reserva\Crear.cshtml" />
     <Content Include="Views\Reserva\Editar.cshtml" />
     <Content Include="Views\PrincipalCliente\MisReservas.cshtml" />
+    <Content Include="Views\Reportes\ClientesConMasReservas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
