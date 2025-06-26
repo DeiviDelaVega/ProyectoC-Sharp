@@ -197,6 +197,7 @@
     <Compile Include="Models\DAOReportes.cs" />
     <Compile Include="Models\DAOReserva.cs" />
     <Compile Include="Models\Inmueble.cs" />
+    <Compile Include="Models\InmueblesMasReservados.cs" />
     <Compile Include="Models\Reserva.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -295,6 +296,7 @@
     <Content Include="Views\Reserva\Editar.cshtml" />
     <Content Include="Views\PrincipalCliente\MisReservas.cshtml" />
     <Content Include="Views\Reportes\ClientesConMasReservas.cshtml" />
+    <Content Include="Views\Reportes\InmueblesMasReservados.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

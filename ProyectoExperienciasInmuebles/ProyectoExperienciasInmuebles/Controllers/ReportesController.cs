@@ -17,5 +17,10 @@ namespace ProyectoExperienciasInmuebles.Controllers
             var datos = db.ObtenerTop5ClientesConMasReservas();
             return View(datos);
         }
+        public ActionResult InmueblesMasReservados()
+        {
+            var datos = db.ObtenerTop5InmueblesMasReservados();
+            return View(datos);
+        }
     }
 }
