@@ -67,20 +67,19 @@ namespace ProyectoExperienciasInmuebles.Controllers
         }
 
         // GET: Reserva/Eliminar/5
+        // GET: Reserva/Eliminar/5
+        // GET: Reserva/Eliminar/5
         public ActionResult Eliminar(int id)
         {
-            var reserva = dao.BuscarPorId(id);
-            if (reserva == null) return HttpNotFound();
-            return View(reserva); // Vista: /Views/Reserva/Eliminar.cshtml
+            dao.Eliminar(id);
+            TempData["Eliminado"] = true; // Muestra SweetAlert en la vista
+            return RedirectToAction("Index"); // O a ListarReservas si usas paginación
         }
 
-        // POST: Reserva/Eliminar/5
-        [HttpPost, ActionName("Eliminar")]
-        public ActionResult EliminarConfirmado(int id)
-        {
-            dao.Eliminar(id);
-            return RedirectToAction("Index");
-        }
+
+
+
+
 
         public ActionResult ExportarExcel()
         {
