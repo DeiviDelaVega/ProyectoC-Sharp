@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ClosedXML.Excel;
 using ProyectoExperienciasInmuebles.Models;
 
 namespace ProyectoExperienciasInmuebles.Controllers
@@ -78,6 +80,56 @@ namespace ProyectoExperienciasInmuebles.Controllers
         {
             dao.Eliminar(id);
             return RedirectToAction("Index");
+        }
+
+        public ActionResult ExportarExcel()
+        {
+            var reservas = dao.Listar();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Reservas");
+                var currentRow = 1;
+
+                worksheet.Cell(currentRow, 1).Value = "ID Reserva";
+                worksheet.Cell(currentRow, 2).Value = "ID Cliente";
+                worksheet.Cell(currentRow, 3).Value = "ID Inmueble";
+                worksheet.Cell(currentRow, 4).Value = "Fecha Inicio";
+                worksheet.Cell(currentRow, 5).Value = "Fecha Fin";
+                worksheet.Cell(currentRow, 6).Value = "Estado";
+                worksheet.Cell(currentRow, 7).Value = "Fecha Reserva";
+                worksheet.Cell(currentRow, 8).Value = "Pago Total";
+
+                foreach (var r in reservas)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = r.IdReserva;
+                    worksheet.Cell(currentRow, 2).Value = r.IdCliente;
+                    worksheet.Cell(currentRow, 3).Value = r.IdInmueble;
+                    worksheet.Cell(currentRow, 4).Value = r.fechaInicio.ToString("dd/MM/yyyy");
+                    worksheet.Cell(currentRow, 5).Value = r.fechaFin.ToString("dd/MM/yyyy");
+                    worksheet.Cell(currentRow, 6).Value = r.estado;
+                    worksheet.Cell(currentRow, 7).Value = r.fechaReserva.ToString("dd/MM/yyyy");
+                    worksheet.Cell(currentRow, 8).Value = r.pagototal;
+                }
+
+                var rango = worksheet.Range(1, 1, currentRow, 8);
+                var tabla = rango.CreateTable();
+
+                tabla.Theme = XLTableTheme.TableStyleMedium1; 
+
+                worksheet.Columns().AdjustToContents();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Position = 0;
+
+                    return File(stream.ToArray(),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        "Reservas.xlsx");
+                }
+            }
         }
     }
 }

@@ -16,10 +16,18 @@
 <div class="list-clientes-container">
     <h2 class="section-title"><strong>MANTENIMIENTO DE RESERVAS</strong></h2>
 
-    <div class="boton-crear-container">
-        <a href="@Url.Action("Crear", "Reserva")" class="btn btn-success btn-lg">
-            <i class="fa fa-plus"></i> Crear nueva Reserva
-        </a>
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <div class="boton-crear-container">
+            <a href="@Url.Action("Crear", "Reserva")" class="btn btn-success btn-lg">
+                <i class="fa fa-plus"></i> Crear nueva Reserva
+            </a>
+        </div>
+
+        <div class="boton-exportar-container">
+            <a href="@Url.Action("ExportarExcel", "Reserva")" class="btn btn-primary btn-lg">
+                <i class="fa fa-file-excel"></i> Exportar a Excel
+            </a>
+        </div>
     </div>
 
     <table class="table">
